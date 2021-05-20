@@ -5,11 +5,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/dashboard/',
+    path: '/',
+    redirect: '/dashboard',
     component: () => import('@/layouts/Index.vue'),
     children: [
       {
-        path: '',
+        path: '/dashboard',
         name: 'Dasdhboard',
         component: () => import('@/views/Home.vue')
       }
