@@ -1,10 +1,19 @@
 <template>
   <div>
     <v-navigation-drawer v-model="drawer" app>
-      <v-list>
-        <v-subheader>Dashbaord</v-subheader>
-        <v-list-item-group v-model="selectedItem" color="deep-purple accent-4">
-          <v-list-item v-for="(item, i) in items" :key="i">
+      <v-list dense>
+        <v-list-item-group color="redcross accent-4">
+          <v-subheader>Overview</v-subheader>
+          <v-list-item v-for="(item, i) in Overview" :key="i">
+            <v-list-item-icon>
+              <v-icon v-text="item.icon"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.text"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-subheader>Management</v-subheader>
+          <v-list-item v-for="(item, i) in Management" :key="i">
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -15,7 +24,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app fixed color="deep-purple accent-4" dark>
+    <v-app-bar app fixed color="red darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Title</v-toolbar-title>
     </v-app-bar>
@@ -25,7 +34,7 @@
       </v-container>
     </v-main>
     <v-footer app absolute inset dark padless>
-      <v-card flat tile class="deep-purple accent-4 white--text text-center">
+      <v-card flat tile class="red accent-3 white--text text-center">
         <v-card-text>
           <v-btn
             v-for="icon in icons"
@@ -53,7 +62,7 @@
         <v-divider></v-divider>
 
         <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+          {{ new Date().getFullYear() }} — <strong>blooddonationlao</strong>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -63,13 +72,22 @@
 export default {
   data: () => ({
     icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
-    selectedItem: 1,
     drawer: false,
-    items: [
-      { text: 'Real-Time', icon: 'mdi-clock' },
-      { text: 'Audience', icon: 'mdi-account' },
-      { text: 'Conversions', icon: 'mdi-flag' }
+    Overview: [{ text: 'Dashbaord', icon: 'mdi-view-dashboard-outline' }],
+    Management: [
+      { text: 'Posts', icon: 'mdi-post-outline' },
+      { text: 'Activity', icon: 'mdi-calendar-edit' },
+      {
+        text: 'Record of Donation',
+        icon: 'mdi-file-document-multiple-outline'
+      },
+      { text: 'Guide', icon: 'mdi-book-open' }
     ]
   })
 }
 </script>
+<style scoped>
+.redcross {
+  color: #de1b23;
+}
+</style>

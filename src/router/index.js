@@ -5,11 +5,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/redcross/',
+    path: '/dashboard/',
     component: () => import('@/layouts/Index.vue'),
     children: [
       {
-        path: 'dashboard',
+        path: '',
         name: 'Dasdhboard',
         component: () => import('@/views/Home.vue')
       }
