@@ -10,5 +10,8 @@ export default new Vuetify({
         redcross: '#de1b23'
       }
     }
+  },
+  icons: {
+    iconfont: 'mdi' || 'fa' || 'fa4'
   }
 })

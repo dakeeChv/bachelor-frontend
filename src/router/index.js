@@ -12,7 +12,29 @@ const routes = [
       {
         path: '/dashboard',
         name: 'Dasdhboard',
-        component: () => import('@/views/Home.vue')
+        component: () => import('@/views/Overview.vue')
+      },
+      {
+        path: '/posts',
+        name: 'Posts',
+        component: () => import('@/views/Posts.vue'),
+        children: [
+          {
+            path: '/posts/add',
+            name: 'Add-Post',
+            component: () => import('@/components/posts/AddPost.vue')
+          },
+          {
+            path: '/posts/edit/:id',
+            name: 'Edit-Post',
+            component: () => import('@/components/posts/EditPost.vue')
+          }
+        ]
+      },
+      {
+        path: '/guide',
+        name: 'Guide',
+        component: () => import('@/views/Guide.vue')
       }
     ]
   },

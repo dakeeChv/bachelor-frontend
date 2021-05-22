@@ -1,10 +1,15 @@
 <template>
-  <div>
+  <div id="main-app">
     <v-navigation-drawer v-model="drawer" app>
       <v-list dense>
         <v-list-item-group color="redcross accent-4">
           <v-subheader>Overview</v-subheader>
-          <v-list-item v-for="(item, i) in Overview" :key="i">
+          <v-list-item
+            v-for="(item, i) in Overview"
+            :key="i"
+            :to="item.path"
+            link
+          >
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -12,8 +17,13 @@
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-subheader>Management</v-subheader>
-          <v-list-item v-for="(item, i) in Management" :key="i">
+          <v-subheader>ຈັດການ</v-subheader>
+          <v-list-item
+            v-for="(item, i) in Management"
+            :key="i.title"
+            :to="item.path"
+            link
+          >
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -26,10 +36,10 @@
     </v-navigation-drawer>
     <v-app-bar app fixed color="red darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Title</v-toolbar-title>
+      <v-toolbar-title>Blood Donation</v-toolbar-title>
     </v-app-bar>
     <v-main>
-      <v-container fluid>
+      <v-container>
         <router-view></router-view>
       </v-container>
     </v-main>
@@ -73,15 +83,22 @@ export default {
   data: () => ({
     icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
     drawer: false,
-    Overview: [{ text: 'Dashbaord', icon: 'mdi-view-dashboard-outline' }],
+    Overview: [
+      {
+        text: 'Dashbaord',
+        icon: 'mdi-view-dashboard-outline',
+        path: '/dashboard'
+      }
+    ],
     Management: [
-      { text: 'Posts', icon: 'mdi-post-outline' },
-      { text: 'Activity', icon: 'mdi-calendar-edit' },
+      { text: 'Posts', icon: 'mdi-post-outline', path: '/posts' },
+      { text: 'Activity', icon: 'mdi-calendar-edit', path: '/activity' },
       {
         text: 'Record of Donation',
-        icon: 'mdi-file-document-multiple-outline'
+        icon: 'mdi-file-document-multiple-outline',
+        path: '/record'
       },
-      { text: 'Guide', icon: 'mdi-book-open' }
+      { text: 'Guide', icon: 'mdi-book-open', path: '/guide' }
     ]
   })
 }
