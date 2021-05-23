@@ -45,7 +45,7 @@ export default {
   data: () => ({
     headers: [
       {
-        text: 'ພາບປົກຄູ່ມື',
+        text: 'ພາບປົກຄູ່ມື.',
         value: 'cover'
       },
       {
