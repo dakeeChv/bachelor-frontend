@@ -115,7 +115,8 @@ export default {
           datePost: 'Candy',
           statusPost: true
         }
-      ]
+      ],
+      indexCurr: null
     }
   },
   methods: {
@@ -128,10 +129,14 @@ export default {
       if (!status) return 'ປິດໂພສ'
       else if (status) return 'ເປີດໂພສ'
     },
-    async editPost(item) {
-      await this.$router.push({
-        path: `/posts/edit/${this.desserts.indexOf(item)}`
-      })
+    editPost(item) {
+      let index = this.desserts.indexOf(item)
+      if (index != this.indexCurr) {
+        this.indexCurr = this.desserts.indexOf(item)
+        return this.$router.push({
+          path: `/posts/edit/${this.desserts.indexOf(item)}`
+        })
+      }
     }
   }
 }

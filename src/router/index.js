@@ -35,6 +35,16 @@ const routes = [
         path: '/guide',
         name: 'Guide',
         component: () => import('@/views/Guide.vue')
+      },
+      {
+        path: '/guide/add',
+        name: 'Add-Guide',
+        component: () => import('@/components/guide/AddGuide.vue')
+      },
+      {
+        path: '/guide/edit/:id',
+        name: 'Add-Guide',
+        component: () => import('@/components/guide/EditGuide.vue')
       }
     ]
   },
