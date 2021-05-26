@@ -9104,7 +9104,7 @@ vue-eslint-parser@^7.0.0:
     esquery "^1.4.0"
     lodash "^4.17.15"
 
-vue-froala-wysiwyg@^3.2.7:
+vue-froala-wysiwyg@~3.2.7:
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/vue-froala-wysiwyg/-/vue-froala-wysiwyg-3.2.7.tgz#a3df3f96500a415f3966313ce57f67c94bfd5de2"
   integrity sha512-HXqTUmxcB3MorA/GXqaytdqWQfsQweIZqHoz1W1PpTzVv0ZLCBNW+cAsDpn+ByZ+IKwPmWpdQmSzi8lZ4TInlw==
