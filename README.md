@@ -1,4 +1,4 @@
-# final-font-final
+# bechelor-lbn-front
 
 ## Project setup
 ```
