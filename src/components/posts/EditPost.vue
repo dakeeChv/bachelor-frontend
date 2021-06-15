@@ -50,7 +50,11 @@ export default {
   data() {
     return {
       config: {
-        events: {}
+        events: {
+          initialized: function () {
+            console.log('initialized')
+          }
+        }
       },
       title: null,
       image: null,

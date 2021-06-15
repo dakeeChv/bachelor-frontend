@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import posts from './posts'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    baseUrl: 'http://localhost:3000/'
+  },
   mutations: {},
   actions: {},
-  modules: {}
+  modules: {
+    posts
+  }
 })

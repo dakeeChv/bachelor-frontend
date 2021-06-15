@@ -1,14 +1,5 @@
 <template>
   <div>
-    <div class="mb-4 d-flex flex-row justify-space-between">
-      <div>
-        <h3>ຂ່າວທັງໝົດ</h3>
-      </div>
-      <v-btn color="red accent-4" outlined rounded to="/posts/add">
-        <v-icon left>fa4 fa-plus</v-icon>
-        ເພີ່ມຂ່າວ</v-btn
-      >
-    </div>
     <v-data-table
       :headers="headers"
       :items="desserts"
@@ -23,34 +14,42 @@
         nextIcon: 'mdi-plus'
       }"
     >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title class="text-h5">ຂ່າວທັງໝົດ</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn color="red accent-4" outlined rounded to="/posts/add">
+            <v-icon left>fa-plus</v-icon>
+            ເພີ່ມຂ່າວ
+          </v-btn>
+        </v-toolbar>
+      </template>
       <template v-slot:[`item.statusPost`]="{ item }">
-        <v-chip :color="getColor(item.statusPost)" dark>
+        <v-chip
+          :class="[item.statusPost ? 'green darken-2' : 'red darken-3']"
+          dark
+        >
           {{ getStatus(item.statusPost) }}
         </v-chip>
       </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn
-          depressed
-          small
-          color="teal darken-3"
-          class="white--text mr-2"
-          @click="editPost(item)"
-          >Edit</v-btn
+        <v-btn color="teal darken-3" icon @click="editPost(item)"
+          ><v-icon small>fa-pencil-alt</v-icon></v-btn
         >
-        <v-btn
-          depressed
-          small
-          color="red accent-3"
-          class="white--text"
-          @click="removePost(item)"
-          >Remove</v-btn
+        <v-btn color="red accent-3" icon @click="removePost(item)"
+          ><v-icon small>fa-trash</v-icon></v-btn
+        >
+        <v-btn color="light-blue darken-1" icon @click="viewPost(item)"
+          ><v-icon small>fa-eye</v-icon></v-btn
         >
       </template>
     </v-data-table>
-    <router-view></router-view>
+    <h1>{{ posts }}</h1>
+    <h1>Hello</h1>
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -119,12 +118,14 @@ export default {
       indexCurr: null
     }
   },
+  mounted() {
+    this.fetchPost()
+  },
+  computed: {
+    ...mapState('posts', ['posts'])
+  },
   methods: {
-    getColor(status) {
-      if (!status) return 'orange'
-      else if (status) return 'green'
-      else return 'gray'
-    },
+    ...mapActions('posts', ['fetchPost']),
     getStatus(status) {
       if (!status) return 'ປິດໂພສ'
       else if (status) return 'ເປີດໂພສ'
@@ -135,6 +136,13 @@ export default {
         this.indexCurr = this.desserts.indexOf(item)
         return this.$router.push({
           path: `/posts/edit/${this.desserts.indexOf(item)}`
+        })
+      }
+    },
+    viewPost(item) {
+      if (item) {
+        return this.$router.push({
+          path: `/posts/view/1`
         })
       }
     }

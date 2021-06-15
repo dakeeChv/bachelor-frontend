@@ -1,9 +1,9 @@
 <template>
   <div id="main-app">
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list dense>
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list nav dense>
         <v-list-item-group color="redcross accent-4">
-          <v-subheader>Overview</v-subheader>
+          <v-subheader>ຈັດການ</v-subheader>
           <v-list-item
             v-for="(item, i) in Overview"
             :key="i"
@@ -11,13 +11,15 @@
             link
           >
             <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+              <v-icon dense v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title
+                class="font-weight-medium"
+                v-text="item.text"
+              ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-subheader>ຈັດການ</v-subheader>
           <v-list-item
             v-for="(item, i) in Management"
             :key="i.title"
@@ -25,16 +27,19 @@
             link
           >
             <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+              <v-icon dense v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title
+                class="font-weight-medium"
+                v-text="item.text"
+              ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app fixed color="red darken-2" dark>
+    <v-app-bar app fixed clipped-left color="red darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Blood Donation</v-toolbar-title>
     </v-app-bar>
@@ -86,19 +91,19 @@ export default {
     Overview: [
       {
         text: 'Dashbaord',
-        icon: 'mdi-view-dashboard-outline',
+        icon: 'fa-chart-line',
         path: '/dashboard'
       }
     ],
     Management: [
-      { text: 'Posts', icon: 'mdi-post-outline', path: '/posts' },
-      { text: 'Activity', icon: 'mdi-calendar-edit', path: '/activity' },
+      { text: 'ຂ່າວສານ', icon: 'far fa-newspaper', path: '/posts' },
+      { text: 'ກິດຈະກຳ', icon: 'fa-calendar-day', path: '/activity' },
       {
-        text: 'Record of Donation',
-        icon: 'mdi-file-document-multiple-outline',
+        text: 'ປະຫວັດການຮັບບໍລິຈາກ',
+        icon: 'fa-file-medical-alt',
         path: '/record'
       },
-      { text: 'Guide', icon: 'mdi-book-open', path: '/guide' }
+      { text: 'ຄູ່ມື', icon: 'fa-book', path: '/guide' }
     ]
   })
 }

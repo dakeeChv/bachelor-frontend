@@ -17,19 +17,27 @@ const routes = [
       {
         path: '/posts',
         name: 'Posts',
-        component: () => import('@/views/Posts.vue'),
-        children: [
-          {
-            path: '/posts/add',
-            name: 'Add-Post',
-            component: () => import('@/components/posts/AddPost.vue')
-          },
-          {
-            path: '/posts/edit/:id',
-            name: 'Edit-Post',
-            component: () => import('@/components/posts/EditPost.vue')
-          }
-        ]
+        component: () => import('@/views/Posts.vue')
+      },
+      {
+        path: '/posts/add',
+        name: 'Add-Post',
+        component: () => import('@/components/posts/AddPost.vue')
+      },
+      {
+        path: '/posts/edit/:id',
+        name: 'Edit-Post',
+        component: () => import('@/components/posts/EditPost.vue')
+      },
+      {
+        path: '/posts/view/:id',
+        name: 'View-Post',
+        component: () => import('@/components/posts/ViewPost.vue')
+      },
+      {
+        path: '/activity',
+        name: 'Activity',
+        component: () => import('@/views/Activity.vue')
       },
       {
         path: '/guide',
@@ -43,8 +51,13 @@ const routes = [
       },
       {
         path: '/guide/edit/:id',
-        name: 'Add-Guide',
+        name: 'Edit-Guide',
         component: () => import('@/components/guide/EditGuide.vue')
+      },
+      {
+        path: '/guide/view/:id',
+        name: 'View-Guide',
+        component: () => import('@/components/guide/ViewGuide.vue')
       }
     ]
   },

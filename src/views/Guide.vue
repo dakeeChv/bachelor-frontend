@@ -1,17 +1,8 @@
 <template>
   <div>
-    <div class="mb-4 d-flex flex-row justify-space-between">
-      <div>
-        <h3>ຄູ່ມືແນະນຳທັງໝົດ</h3>
-      </div>
-      <v-btn color="red accent-4" outlined rounded to="/guide/add">
-        <v-icon left>fa-plus</v-icon>
-        ເພີ່ມຄູ່ມື
-      </v-btn>
-    </div>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="guides"
       :items-per-page="5"
       item-key="title"
       class="elevation-1"
@@ -23,6 +14,16 @@
         nextIcon: 'mdi-plus'
       }"
     >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title class="text-h5">ຄູ່ມືແນະນຳ</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn color="red accent-4" outlined rounded to="/guide/add">
+            <v-icon left>fa-plus</v-icon>
+            ເພີ່ມຄູ່ມື
+          </v-btn>
+        </v-toolbar>
+      </template>
       <template v-slot:[`item.cover`]="{ item }">
         <v-avatar class="ma-2">
           <v-img :src="item.cover"></v-img>
@@ -30,10 +31,11 @@
       </template>
       <template v-slot:[`item.action`]="{ item }">
         <v-btn color="teal darken-3" icon @click="editGuide(item)"
-          ><v-icon small>fa-pencil</v-icon></v-btn
+          ><v-icon small>fa-pencil-alt</v-icon></v-btn
         >
-        <v-btn color="red accent-3" icon
-          ><v-icon small>fa-trash-o</v-icon></v-btn
+        <v-btn color="red accent-3" icon><v-icon small>fa-trash</v-icon></v-btn>
+        <v-btn color="light-blue darken-1" icon
+          ><v-icon small>fa-eye</v-icon></v-btn
         >
       </template>
     </v-data-table>
@@ -45,7 +47,7 @@ export default {
   data: () => ({
     headers: [
       {
-        text: 'ພາບປົກຄູ່ມື.',
+        text: 'ພາບປົກຄູ່ມື',
         value: 'cover'
       },
       {
@@ -59,7 +61,7 @@ export default {
         value: 'action'
       }
     ],
-    desserts: [
+    guides: [
       {
         title: 'ປະໂຫຍດຂອງການບໍລິຈາກເລືອດ',
         cover:
