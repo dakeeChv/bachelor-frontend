@@ -1,29 +1,30 @@
 <template>
   <v-card class="py-6">
-    <!-- <div class="d-flex flex-row justify-center">
-      <v-alert
-        class="text-center"
-        v-model="status"
-        border="left"
-        close-text="Close Alert"
-        color="deep-purple accent-4"
-        width="50%"
-        dark
-        dismissible
-      >
-        Aenean imperdiet.
-      </v-alert>
-      <div class="text-center">
-        <v-btn
-          v-if="!alert"
-          color="deep-purple accent-4"
-          dark
-          @click="alert = true"
-        >
-          Reset
-        </v-btn>
-      </div>
-    </div> -->
+    <v-alert
+      ref="alert"
+      class="mx-auto"
+      v-model="notice.alert"
+      border="left"
+      close-text="Close Alert"
+      color="success"
+      width="50%"
+      dark
+      dismissible
+    >
+      {{ notice.message }}
+    </v-alert>
+    <v-alert
+      class="text-center"
+      v-model="notice.error"
+      border="left"
+      close-text="Close Alert"
+      color="success"
+      width="50%"
+      dark
+      dismissible
+    >
+      ເກີດຂໍ້ຜິດພາດ
+    </v-alert>
     <!-- ຫົວຂໍ້ start -->
     <v-toolbar flat class="mx-6 mb-6">
       <v-toolbar-title class="text-h5"> ເພີ່ມຂ່າວໃໝ່</v-toolbar-title>
@@ -59,7 +60,7 @@
           </v-radio-group>
           <div class="d-flex flex-row justify-center">
             <v-btn class="mr-6" color="redcross" outlined rounded
-              ><clipper-upload v-model="OrgImg">
+              ><clipper-upload v-model="orgImg">
                 <v-icon left>fa-file-upload</v-icon
                 >ອັບໂຫຼດຮູບພາບ</clipper-upload
               ></v-btn
@@ -80,7 +81,7 @@
             <clipper-fixed
               class="my-clipper"
               ref="clipper"
-              :src="OrgImg"
+              :src="orgImg"
               preview="my-preview"
               :ratio="16 / 9"
             >
@@ -90,13 +91,7 @@
               <div class="placeholder" slot="placeholder"></div>
             </clipper-preview> -->
             <div class="d-flex flex-row justify-center">
-              <v-img
-                ref="image"
-                :src="resultURL"
-                width="100%"
-                max-width="500"
-                alt=""
-              />
+              <v-img :src="cropImg" width="100%" max-width="500" alt="" />
             </div>
           </div>
         </v-col>
@@ -123,7 +118,11 @@
         >
       </v-row>
     </v-form>
-    <p>{{ posts }}</p>
+    <v-overlay :value="notice.pending">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+    <!-- <v-btn :to="#alert"></v-btn> -->
+    <!-- <p>{{ posts }}</p> -->
     <!-- ຟອມເພີ່ມຂ່າວ end -->
     <!-- <v-snackbar
       v-if="!!progressImage"
@@ -207,15 +206,15 @@ export default {
       },
 
       // image
-      OrgImg: '',
+      orgImg: null,
       // cropped: false,
-      resultURL: '',
+      cropImg: null,
       progressImage: null,
       canavImg: null
     }
   },
   computed: {
-    ...mapState('posts', ['newPost', 'posts'])
+    ...mapState('posts', ['newPost', 'posts', 'notice'])
   },
   methods: {
     goBack() {
@@ -223,10 +222,11 @@ export default {
     },
     getResultImg: function () {
       this.canavImg = this.$refs.clipper.clip() //call component's clip method
-      this.resultURL = this.canavImg.toDataURL('image/png', 1) //canvas->image
+      this.cropImg = this.canavImg.toDataURL('image/png', 1) //canvas->image
     },
     ...mapActions('posts', ['createPost']),
     callCreatePost() {
+      this.notice['pending'] = !this.notice['pending']
       this.canavImg.toBlob((blob) => {
         let storageRef = firebase.storage().ref('images/' + uuidv4())
         const uploadTask = storageRef.put(blob, blob.type)
@@ -267,6 +267,13 @@ export default {
           }
         )
       })
+      this.orgImg = null
+      this.cropImg = null
+
+      // go to alert
+      let alertEle = this.$refs['alert']
+      var top = alertEle.offsetTop
+      window.scrollTo(0, top)
     }
   }
 }

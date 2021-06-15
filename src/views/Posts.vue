@@ -2,7 +2,7 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="posts"
       :items-per-page="5"
       item-key="title"
       class="elevation-1"
@@ -44,12 +44,12 @@
         >
       </template>
     </v-data-table>
-    <h1>{{ posts }}</h1>
-    <h1>Hello</h1>
+    <!-- <h1>{{ posts }}</h1>
+    <h1>Hello</h1> -->
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -57,64 +57,65 @@ export default {
         {
           text: 'ຊື່ຫົວຂໍ້ຂ່າວ',
           align: 'start',
-          value: 'title'
+          value: 'title',
+          width: '50%'
         },
-        { text: 'ເວລາທີ່ສ້າງ', value: 'datePost' },
+        { text: 'ເວລາທີ່ຟໂພສ', value: 'datePost' },
         { text: 'ສະຖານະ', value: 'statusPost' },
         { text: 'ຈັດການ', value: 'action' }
       ],
-      desserts: [
-        {
-          title: 'Frozen Yogurt',
-          datePost: 'Ice cream',
-          statusPost: false
-        },
-        {
-          title: 'Ice cream sandwich',
-          datePost: 'Ice cream',
-          statusPost: true
-        },
-        {
-          title: 'Eclair',
-          datePost: 'Cookie',
-          statusPost: true
-        },
-        {
-          title: 'Cupcake',
-          datePost: 'Pastry',
-          statusPost: true
-        },
-        {
-          title: 'Gingerbread',
-          datePost: 'Cookie',
-          statusPost: true
-        },
-        {
-          title: 'Jelly bean',
-          datePost: 'Candy',
-          statusPost: false
-        },
-        {
-          title: 'Lollipop',
-          datePost: 'Candy',
-          statusPost: false
-        },
-        {
-          title: 'Honeycomb',
-          datePost: 'Toffee',
-          statusPost: true
-        },
-        {
-          title: 'Donut',
-          datePost: 'Pastry',
-          statusPost: true
-        },
-        {
-          title: 'KitKat',
-          datePost: 'Candy',
-          statusPost: true
-        }
-      ],
+      // desserts: [
+      //   {
+      //     title: 'Frozen Yogurt',
+      //     datePost: 'Ice cream',
+      //     statusPost: false
+      //   },
+      //   {
+      //     title: 'Ice cream sandwich',
+      //     datePost: 'Ice cream',
+      //     statusPost: true
+      //   },
+      //   {
+      //     title: 'Eclair',
+      //     datePost: 'Cookie',
+      //     statusPost: true
+      //   },
+      //   {
+      //     title: 'Cupcake',
+      //     datePost: 'Pastry',
+      //     statusPost: true
+      //   },
+      //   {
+      //     title: 'Gingerbread',
+      //     datePost: 'Cookie',
+      //     statusPost: true
+      //   },
+      //   {
+      //     title: 'Jelly bean',
+      //     datePost: 'Candy',
+      //     statusPost: false
+      //   },
+      //   {
+      //     title: 'Lollipop',
+      //     datePost: 'Candy',
+      //     statusPost: false
+      //   },
+      //   {
+      //     title: 'Honeycomb',
+      //     datePost: 'Toffee',
+      //     statusPost: true
+      //   },
+      //   {
+      //     title: 'Donut',
+      //     datePost: 'Pastry',
+      //     statusPost: true
+      //   },
+      //   {
+      //     title: 'KitKat',
+      //     datePost: 'Candy',
+      //     statusPost: true
+      //   }
+      // ],
       indexCurr: null
     }
   },
@@ -126,23 +127,27 @@ export default {
   },
   methods: {
     ...mapActions('posts', ['fetchPost']),
+    ...mapMutations('posts', ['setCurrPost']),
     getStatus(status) {
       if (!status) return 'ປິດໂພສ'
       else if (status) return 'ເປີດໂພສ'
     },
     editPost(item) {
-      let index = this.desserts.indexOf(item)
-      if (index != this.indexCurr) {
-        this.indexCurr = this.desserts.indexOf(item)
-        return this.$router.push({
-          path: `/posts/edit/${this.desserts.indexOf(item)}`
-        })
-      }
+      // let index = this.posts.indexOf(item)
+      // if (index != this.indexCurr) {
+      //   this.indexCurr = this.posts.indexOf(item)
+      //   return this.$router.push({
+      //     path: `/posts/edit/${this.posts.indexOf(item)}`
+      //   })
+      // }
+      console.log(item)
     },
     viewPost(item) {
+      let id = item._id
+      this.setCurrPost(item)
       if (item) {
         return this.$router.push({
-          path: `/posts/view/1`
+          path: `/posts/view/${id}`
         })
       }
     }
