@@ -7,4 +7,8 @@ const firebaseConfig = {
   appId: '1:331392636647:web:5412f521a4a36e806f3442',
   measurementId: 'G-8ERFNJ8LRK'
 }
-export default firebaseConfig
+
+import firebase from 'firebase/app'
+import 'firebase/storage'
+firebase.initializeApp(firebaseConfig)
+export default firebase
