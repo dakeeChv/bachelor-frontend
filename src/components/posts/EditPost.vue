@@ -1,65 +1,271 @@
 <template>
-  <v-card class="mt-12 py-6">
-    <div class="d-flex flex-row justify-center">
-      <v-icon left>fa fa-pencil-square-o</v-icon>
-      <h3>ແກ້ໄຂເນື້ອຫາ {{ $route.params.id }}</h3>
+  <v-card class="py-6">
+    <div class="text-center">
+      <v-alert
+        ref="alert"
+        class="mx-auto"
+        v-model="notice.alert"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
+      >
+        {{ notice.message }}
+      </v-alert>
+      <v-alert
+        class="text-center"
+        v-model="notice.error"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
+      >
+        ເກີດຂໍ້ຜິດພາດ
+      </v-alert>
     </div>
+    <!-- ຫົວຂໍ້ start -->
+    <v-toolbar flat class="mx-6 mb-6">
+      <v-toolbar-title class="text-h5"> ແກ້ໄຂຂ່າວ</v-toolbar-title>
+    </v-toolbar>
+    <v-divider></v-divider>
+    <!-- ຫົວຂໍ້ end -->
+    <!-- ຟອມເພີ່ມຂ່າວ start -->
     <v-form>
-      <v-row align="center" justify="space-around">
-        <v-col cols="12" md="8" sm="12">
+      <v-row align="center" justify="space-around" class="px-12">
+        <v-col cols="12" md="6" sm="12">
           <v-text-field
-            v-model="title"
-            prepend-icon="fa-header"
-            label="Tile"
+            v-model="currPost.title"
+            prepend-inner-icon="fa-newspaper"
+            label="ຫົວຂໍ້ຂ່າວ"
             color="redcross"
+            prefix=" "
             required
           ></v-text-field>
-          <v-file-input
-            v-model="image"
-            label="File image"
-            prepend-icon="fa-file-photo-o"
-            color="redcross"
-            outlined
-            dense
-          ></v-file-input>
+          <v-radio-group v-model="currPost.statusPost">
+            <template v-slot:label>
+              <div><strong>ກຳນົດສະຖານະຂອງຂ່າວ</strong></div>
+            </template>
+            <v-radio color="redcross" :value="true">
+              <template v-slot:label>
+                <div>ສະແດງສາທາລະນະທັນທີ</div>
+              </template>
+            </v-radio>
+            <v-radio color="redcross" :value="false">
+              <template v-slot:label>
+                <div>ເຊື່ອງໄວ້</div>
+              </template>
+            </v-radio>
+          </v-radio-group>
+          <div class="d-flex flex-row justify-center">
+            <v-btn class="mr-6" color="redcross" outlined rounded
+              ><clipper-upload v-model="orgImg">
+                <v-icon left>fa-file-upload</v-icon
+                >ອັບໂຫຼດຮູບພາບ</clipper-upload
+              ></v-btn
+            >
+            <v-btn
+              icon
+              class="mr-4"
+              color="amber darken-4"
+              small
+              @click="getResultImg"
+            >
+              <v-icon small>fa-crop-alt</v-icon>
+            </v-btn>
+          </div>
         </v-col>
-      </v-row>
-      <v-row align="center" justify="space-around">
-        <v-col cols="12" md="10" sm="12">
-          <v-chip class="ma-2" label disabled>
-            <v-icon left>fa-file-text-o</v-icon>
-            Content
-          </v-chip>
-          <froala :tag="'textarea'" :config="config" v-model="content"></froala>
-          <div class="text-center">
-            <v-btn outlined color="green darken-3" class="my-6 mr-4"
-              >ບັນທຶກ</v-btn
+        <v-col class="mt-6" cols="12" md="12">
+          <div class="d-flex flex-row justify-space-around">
+            <clipper-fixed
+              v-if="orgImg"
+              class="my-clipper"
+              ref="clipper"
+              :src="orgImg"
+              preview="my-preview"
+              :ratio="16 / 9"
             >
-            <v-btn dark depressed color="redcross" class="my-6" to="/posts"
-              >ຍົກເລີກ</v-btn
-            >
+              <div class="placeholder" slot="placeholder"></div>
+            </clipper-fixed>
+            <!-- <clipper-preview name="my-preview" class="my-clipper">
+              <div class="placeholder" slot="placeholder"></div>
+            </clipper-preview> -->
+            <div style="border-style: dashed">
+              <v-img :src="cropImg" width="100%" max-width="500" alt="" />
+            </div>
           </div>
         </v-col>
       </v-row>
+      <v-row align="center" justify="space-around" class="px-4">
+        <v-col cols="12" md="11" sm="12">
+          <ckeditor
+            :editor="editor"
+            v-model="currPost.content"
+            :config="editorConfig"
+          ></ckeditor>
+        </v-col>
+      </v-row>
+      <v-row align="center" justify="center">
+        <v-btn
+          dark
+          color="green darken-3"
+          class="my-6 mr-4"
+          @click="callEditPost"
+          >ບັນທຶກການແກ້ໄຂ</v-btn
+        >
+        <v-btn dark depressed color="redcross" class="my-6" @click="goBack"
+          >ຍົກເລີກ</v-btn
+        >
+      </v-row>
     </v-form>
+    <v-overlay :value="notice.pending">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+    <!-- <v-btn :to="#alert"></v-btn> -->
+    <!-- <p>{{ posts }}</p> -->
+    <!-- ຟອມເພີ່ມຂ່າວ end -->
+    <!-- <v-snackbar
+      v-if="!!progressImage"
+      :timeout="3000"
+      color="blue-grey"
+      rounded="pill"
+      top
+    >
+      <v-progress-linear
+        :value="progressImage"
+        height="10"
+        striped
+        color="deep-orange"
+        >{{ progressImage }}</v-progress-linear
+      >
+    </v-snackbar> -->
   </v-card>
 </template>
 <script>
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import firebase from '@/functions/upload'
+
+import { mapActions, mapState } from 'vuex'
+
 export default {
   name: 'EditPost',
   data() {
     return {
-      config: {
-        events: {
-          initialized: function () {
-            console.log('initialized')
-          }
-        }
+      // editor
+      editor: ClassicEditor,
+      editorConfig: {
+        mediaEmbed: {
+          previewsInData: true
+        },
+        toolbar: {
+          items: [
+            'heading',
+            '|',
+            'alignment:left',
+            'alignment:right',
+            'alignment:center',
+            'alignment:justify',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            '|',
+            'indent',
+            'outdent',
+            '|',
+            'imageUpload',
+            'blockQuote',
+            'insertTable',
+            'mediaEmbed',
+            'undo',
+            'redo'
+          ]
+        },
+        image: {
+          // Configure the available styles.
+          styles: ['alignLeft', 'alignCenter', 'alignRight'],
+
+          // You need to configure the image toolbar, too, so it shows the new style
+          // buttons as well as the resize buttons.
+          toolbar: [
+            'imageStyle:alignLeft',
+            'imageStyle:alignCenter',
+            'imageStyle:alignRight',
+            '|',
+            'imageTextAlternative'
+          ]
+        },
+        table: {
+          contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+        },
+        // This value must be kept in sync with the language defined in webpack.config.js.
+        language: 'en'
       },
-      title: null,
-      image: null,
-      content: 'Edit Your Content Here!'
+
+      // image
+      orgImg: null,
+
+      // cropped: false,
+      cropImg: null,
+      progressImage: null,
+      canavImg: null
+    }
+  },
+  mounted() {
+    this.cropImg = this.currPost['image']
+  },
+  computed: {
+    ...mapState('posts', ['currPost', 'notice'])
+  },
+  methods: {
+    goBack() {
+      return this.$router.go(-1)
+    },
+    getResultImg: function () {
+      this.canavImg = this.$refs.clipper.clip() //call component's clip method
+      this.cropImg = this.canavImg.toDataURL('image/png', 1) //canvas->image
+    },
+    ...mapActions('posts', ['editPost']),
+    callEditPost() {
+      if (this.canavImg) {
+        this.notice['pending'] = !this.notice['pending']
+        this.canavImg.toBlob(async (blob) => {
+          let storageRef = firebase.storage().refFromURL(this.currPost.image)
+          // .ref()
+          // .child('images/' + this.currPost.image)
+          await storageRef.put(blob, blob.type)
+          this.currPost['image'] = await storageRef.getDownloadURL()
+        })
+      }
+      this.currPost['statusPost'] =
+        this.currPost['statusPost'] === true ? true : false
+      this.currPost['penname'] = 'Admin-VTE'
+      this.editPost()
+      // this.editPost()
+
+      // go to alert
+      let alertEle = this.$refs['alert']
+      var top = alertEle.offsetTop
+      window.scrollTo(0, top)
     }
   }
 }
 </script>
+<style scoped>
+.my-clipper {
+  width: 100%;
+  max-width: 500px;
+}
+
+.placeholder {
+  text-align: center;
+  /* padding: 20px;
+  background-color: whitesmoke; */
+  border-radius: 15px;
+  color: #36405a;
+}
+</style>

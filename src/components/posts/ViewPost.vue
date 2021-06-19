@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-img
         :aspect-ratio="16 / 9"
-        max-height="350px"
+        max-height="400px"
         :src="currPost.image"
         contain
       ></v-img>

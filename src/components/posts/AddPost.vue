@@ -92,7 +92,10 @@
             <!-- <clipper-preview name="my-preview" class="my-clipper">
               <div class="placeholder" slot="placeholder"></div>
             </clipper-preview> -->
-            <div class="d-flex flex-row justify-center">
+            <div
+              class="d-flex flex-row justify-center"
+              style="border-style: dashed"
+            >
               <v-img :src="cropImg" width="100%" max-width="500" alt="" />
             </div>
           </div>
@@ -216,7 +219,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('posts', ['newPost', 'posts', 'notice'])
+    ...mapState('posts', ['newPost', 'notice'])
   },
   methods: {
     goBack() {

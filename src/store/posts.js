@@ -65,6 +65,16 @@ export default {
             state.notice['error'] = !err
           }, 5000)
         })
+    },
+    editPost({ commit, state }) {
+      return api()
+        .patch(`news/${state.currPost._id}`)
+        .then(({ data }) => {
+          console.log(data)
+          commit('updatePost', state.currPost)
+          commit('setCurrPost', state.currPost)
+          commit('setNotice', data.notice)
+        })
     }
   },
   getters: {},
@@ -94,6 +104,9 @@ export default {
     },
     removePost(state, currPost) {
       state.posts.splice(state.posts.indexOf(currPost), 1)
+    },
+    updatePost(state, currPost) {
+      state.posts.splice(state.posts.indexOf(currPost), 1, currPost)
     }
   }
 }

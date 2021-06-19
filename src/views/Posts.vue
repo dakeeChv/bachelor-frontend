@@ -102,14 +102,13 @@ export default {
       else if (status) return 'ເປີດໂພສ'
     },
     editPost(item) {
-      // let index = this.posts.indexOf(item)
-      // if (index != this.indexCurr) {
-      //   this.indexCurr = this.posts.indexOf(item)
-      //   return this.$router.push({
-      //     path: `/posts/edit/${this.posts.indexOf(item)}`
-      //   })
-      // }
-      console.log(item)
+      let id = item._id
+      this.setCurrPost(item)
+      if (item) {
+        return this.$router.push({
+          path: `/posts/edit/${id}`
+        })
+      }
     },
     viewPost(item) {
       let id = item._id
