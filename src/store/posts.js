@@ -25,21 +25,21 @@ export default {
   actions: {
     fetchPost({ commit }) {
       return api()
-        .get(`news/read`)
+        .get(`post/read`)
         .then(({ data }) => {
           commit('setPost', data.data)
         })
     },
     fetchCurrPost({ commit }, idCurr) {
       return api()
-        .get(`news/${idCurr}`)
+        .get(`post/${idCurr}`)
         .then(({ data }) => {
           commit('setCurrPost', data.data)
         })
     },
     async createPost({ commit, state }) {
       return await api()
-        .post('news/add', state.newPost)
+        .post('post/add', state.newPost)
         .then(({ data }) => {
           commit('appendPost', data.data)
           commit('setNewPost', {})
@@ -62,7 +62,7 @@ export default {
       state.posts = posts
     },
     appendPost(state, post) {
-      state.posts.push(post)
+      state.posts.unshift(post)
     },
     setNewPost(state, newPost) {
       state.newPost = newPost

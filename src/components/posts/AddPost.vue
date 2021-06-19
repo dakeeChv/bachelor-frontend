@@ -144,10 +144,10 @@
 <script>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
-import firebase from 'firebase/app'
-import firebaseConfig from '@/functions/upload'
-import 'firebase/storage'
-firebase.initializeApp(firebaseConfig)
+// import firebase from 'firebase/app'
+import firebase from '@/functions/upload'
+// import 'firebase/storage'
+// firebase.initializeApp(firebaseConfig)
 
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
