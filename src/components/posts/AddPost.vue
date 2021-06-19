@@ -1,30 +1,32 @@
 <template>
   <v-card class="py-6">
-    <v-alert
-      ref="alert"
-      class="mx-auto"
-      v-model="notice.alert"
-      border="left"
-      close-text="Close Alert"
-      color="success"
-      width="50%"
-      dark
-      dismissible
-    >
-      {{ notice.message }}
-    </v-alert>
-    <v-alert
-      class="text-center"
-      v-model="notice.error"
-      border="left"
-      close-text="Close Alert"
-      color="success"
-      width="50%"
-      dark
-      dismissible
-    >
-      ເກີດຂໍ້ຜິດພາດ
-    </v-alert>
+    <div class="text-center">
+      <v-alert
+        ref="alert"
+        class="mx-auto"
+        v-model="notice.alert"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
+      >
+        {{ notice.message }}
+      </v-alert>
+      <v-alert
+        class="text-center"
+        v-model="notice.error"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
+      >
+        ເກີດຂໍ້ຜິດພາດ
+      </v-alert>
+    </div>
     <!-- ຫົວຂໍ້ start -->
     <v-toolbar flat class="mx-6 mb-6">
       <v-toolbar-title class="text-h5"> ເພີ່ມຂ່າວໃໝ່</v-toolbar-title>
@@ -90,7 +92,10 @@
             <!-- <clipper-preview name="my-preview" class="my-clipper">
               <div class="placeholder" slot="placeholder"></div>
             </clipper-preview> -->
-            <div class="d-flex flex-row justify-center">
+            <div
+              class="d-flex flex-row justify-center"
+              style="border-style: dashed"
+            >
               <v-img :src="cropImg" width="100%" max-width="500" alt="" />
             </div>
           </div>
@@ -143,11 +148,7 @@
 </template>
 <script>
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-
-// import firebase from 'firebase/app'
 import firebase from '@/functions/upload'
-// import 'firebase/storage'
-// firebase.initializeApp(firebaseConfig)
 
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
@@ -167,6 +168,10 @@ export default {
           items: [
             'heading',
             '|',
+            'alignment:left',
+            'alignment:right',
+            'alignment:center',
+            'alignment:justify',
             'bold',
             'italic',
             'link',
@@ -214,7 +219,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('posts', ['newPost', 'posts', 'notice'])
+    ...mapState('posts', ['newPost', 'notice'])
   },
   methods: {
     goBack() {

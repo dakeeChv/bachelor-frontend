@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 import posts from './posts'
 import guide from './guide'
@@ -15,5 +16,6 @@ export default new Vuex.Store({
   modules: {
     posts,
     guide
-  }
+  },
+  plugins: [createPersistedState()]
 })

@@ -1,5 +1,20 @@
 <template>
   <div>
+    <div class="text-center">
+      <v-alert
+        ref="alert"
+        class="mx-auto"
+        v-model="notice.alert"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
+      >
+        {{ notice.message }}
+      </v-alert>
+    </div>
     <v-data-table
       :headers="headers"
       :items="posts"
@@ -49,6 +64,12 @@
   </div>
 </template>
 <script>
+import firebase from '@/functions/upload'
+// import firebase from 'firebase/app'
+// import firebaseConfig from '@/functions/upload'
+// import 'firebase/storage'
+// firebase.initializeApp(firebaseConfig)
+
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
@@ -64,58 +85,6 @@ export default {
         { text: 'ສະຖານະ', value: 'statusPost' },
         { text: 'ຈັດການ', value: 'action' }
       ],
-      // desserts: [
-      //   {
-      //     title: 'Frozen Yogurt',
-      //     datePost: 'Ice cream',
-      //     statusPost: false
-      //   },
-      //   {
-      //     title: 'Ice cream sandwich',
-      //     datePost: 'Ice cream',
-      //     statusPost: true
-      //   },
-      //   {
-      //     title: 'Eclair',
-      //     datePost: 'Cookie',
-      //     statusPost: true
-      //   },
-      //   {
-      //     title: 'Cupcake',
-      //     datePost: 'Pastry',
-      //     statusPost: true
-      //   },
-      //   {
-      //     title: 'Gingerbread',
-      //     datePost: 'Cookie',
-      //     statusPost: true
-      //   },
-      //   {
-      //     title: 'Jelly bean',
-      //     datePost: 'Candy',
-      //     statusPost: false
-      //   },
-      //   {
-      //     title: 'Lollipop',
-      //     datePost: 'Candy',
-      //     statusPost: false
-      //   },
-      //   {
-      //     title: 'Honeycomb',
-      //     datePost: 'Toffee',
-      //     statusPost: true
-      //   },
-      //   {
-      //     title: 'Donut',
-      //     datePost: 'Pastry',
-      //     statusPost: true
-      //   },
-      //   {
-      //     title: 'KitKat',
-      //     datePost: 'Candy',
-      //     statusPost: true
-      //   }
-      // ],
       indexCurr: null
     }
   },
@@ -123,24 +92,23 @@ export default {
     this.fetchPost()
   },
   computed: {
-    ...mapState('posts', ['posts'])
+    ...mapState('posts', ['posts', 'notice'])
   },
   methods: {
-    ...mapActions('posts', ['fetchPost']),
+    ...mapActions('posts', ['fetchPost', 'deletePost']),
     ...mapMutations('posts', ['setCurrPost']),
     getStatus(status) {
       if (!status) return 'ປິດໂພສ'
       else if (status) return 'ເປີດໂພສ'
     },
     editPost(item) {
-      // let index = this.posts.indexOf(item)
-      // if (index != this.indexCurr) {
-      //   this.indexCurr = this.posts.indexOf(item)
-      //   return this.$router.push({
-      //     path: `/posts/edit/${this.posts.indexOf(item)}`
-      //   })
-      // }
-      console.log(item)
+      let id = item._id
+      this.setCurrPost(item)
+      if (item) {
+        return this.$router.push({
+          path: `/posts/edit/${id}`
+        })
+      }
     },
     viewPost(item) {
       let id = item._id
@@ -150,6 +118,21 @@ export default {
           path: `/posts/view/${id}`
         })
       }
+    },
+    removePost(item) {
+      const storageRef = firebase.storage().refFromURL(item.image)
+
+      // Delete the file
+      storageRef
+        .delete()
+        .then(() => {
+          // File deleted successfully
+          this.deletePost(item)
+        })
+        .catch((error) => {
+          // Uh-oh, an error occurred!
+          console.log(error)
+        })
     }
   }
 }

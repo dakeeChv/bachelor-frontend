@@ -19,7 +19,7 @@ export default {
       alert: false,
       pending: false,
       message: '',
-      error: false
+      error: null
     }
   },
   actions: {
@@ -51,6 +51,30 @@ export default {
             state.notice['error'] = !err
           }, 5000)
         })
+    },
+    deletePost({ commit, state }, currPost) {
+      return api()
+        .delete(`post/${currPost._id}`)
+        .then(({ data }) => {
+          commit('removePost', currPost)
+          commit('setNotice', data.notice)
+        })
+        .catch((err) => {
+          state.notice['error'] = !!err
+          setTimeout(() => {
+            state.notice['error'] = !err
+          }, 5000)
+        })
+    },
+    editPost({ commit, state }) {
+      return api()
+        .patch(`post/${state.currPost._id}`, state.currPost)
+        .then(({ data }) => {
+          // console.log(state.currPost)
+          commit('updatePost', state.currPost)
+          commit('setCurrPost', state.currPost)
+          commit('setNotice', data.notice)
+        })
     }
   },
   getters: {},
@@ -77,6 +101,12 @@ export default {
         state.notice['alert'] = false
         state.notice['message'] = ''
       }, 5000)
+    },
+    removePost(state, currPost) {
+      state.posts.splice(state.posts.indexOf(currPost), 1)
+    },
+    updatePost(state, currPost) {
+      state.posts.splice(state.posts.indexOf(currPost), 1, currPost)
     }
   }
 }
