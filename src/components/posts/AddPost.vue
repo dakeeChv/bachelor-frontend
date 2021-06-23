@@ -14,18 +14,6 @@
       >
         {{ notice.message }}
       </v-alert>
-      <v-alert
-        class="text-center"
-        v-model="notice.error"
-        border="left"
-        close-text="Close Alert"
-        color="success"
-        width="50%"
-        dark
-        dismissible
-      >
-        ເກີດຂໍ້ຜິດພາດ
-      </v-alert>
     </div>
     <!-- ຫົວຂໍ້ start -->
     <v-toolbar flat class="mx-6 mb-6">
@@ -34,7 +22,7 @@
     <v-divider></v-divider>
     <!-- ຫົວຂໍ້ end -->
     <!-- ຟອມເພີ່ມຂ່າວ start -->
-    <v-form>
+    <v-form ref="form">
       <v-row align="center" justify="space-around" class="px-12">
         <v-col cols="12" md="6" sm="12">
           <v-text-field
@@ -43,18 +31,19 @@
             label="ຫົວຂໍ້ຂ່າວ"
             color="redcross"
             prefix=" "
+            :rules="titleRules"
             required
           ></v-text-field>
-          <v-radio-group v-model="newPost.statusPost">
+          <v-radio-group v-model="statusPost">
             <template v-slot:label>
               <div><strong>ກຳນົດສະຖານະຂອງຂ່າວ</strong></div>
             </template>
-            <v-radio color="redcross" value="true">
+            <v-radio color="redcross" :value="true">
               <template v-slot:label>
                 <div>ສະແດງສາທາລະນະທັນທີ</div>
               </template>
             </v-radio>
-            <v-radio color="redcross" value="false">
+            <v-radio color="redcross" :value="false">
               <template v-slot:label>
                 <div>ເຊື່ອງໄວ້</div>
               </template>
@@ -76,11 +65,15 @@
             >
               <v-icon small>fa-crop-alt</v-icon>
             </v-btn>
+            <v-btn v-if="imageRules" text class="mr-4" color="redcross" small>
+              ກະລຸນາອັບໂຫຼດຮູບ
+            </v-btn>
           </div>
         </v-col>
         <v-col cols="12" md="12">
           <div class="d-flex flex-row justify-space-around">
             <clipper-fixed
+              v-if="!!orgImg"
               class="my-clipper"
               ref="clipper"
               :src="orgImg"
@@ -92,23 +85,34 @@
             <!-- <clipper-preview name="my-preview" class="my-clipper">
               <div class="placeholder" slot="placeholder"></div>
             </clipper-preview> -->
-            <div
-              class="d-flex flex-row justify-center"
-              style="border-style: dashed"
-            >
-              <v-img :src="cropImg" width="100%" max-width="500" alt="" />
+            <div class="d-flex flex-row justify-center">
+              <v-img
+                v-if="cropImg"
+                :src="cropImg"
+                width="100%"
+                max-width="500"
+                style="border-style: dashed"
+                alt=""
+              />
             </div>
           </div>
         </v-col>
       </v-row>
       <v-row align="center" justify="space-around" class="px-4">
         <v-col cols="12" md="11" sm="12">
-          <ckeditor
+          <!-- <ckeditor
             :editor="editor"
             v-model="newPost.content"
             :config="editorConfig"
-          ></ckeditor>
+          ></ckeditor> -->
+          <ceditor
+            :content.sync="newPost.content"
+            @onInput="(c) => (this.newPost['content'] = c)"
+          />
         </v-col>
+        <v-btn v-if="contentRules" text class="mr-4" color="redcross" small>
+          ກະລຸນາໃສ່ເນື້ອຫາຂ່າວ
+        </v-btn>
       </v-row>
       <v-row align="center" justify="center">
         <v-btn
@@ -124,91 +128,40 @@
       </v-row>
     </v-form>
     <v-overlay :value="notice.pending">
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-    </v-overlay>
-    <!-- <v-btn :to="#alert"></v-btn> -->
-    <!-- <p>{{ posts }}</p> -->
-    <!-- ຟອມເພີ່ມຂ່າວ end -->
-    <!-- <v-snackbar
-      v-if="!!progressImage"
-      :timeout="3000"
-      color="blue-grey"
-      rounded="pill"
-      top
-    >
-      <v-progress-linear
+      <v-progress-circular
+        :rotate="180"
+        :size="64"
+        :width="8"
         :value="progressImage"
-        height="10"
-        striped
-        color="deep-orange"
-        >{{ progressImage }}</v-progress-linear
+        color="redcross"
+        >{{ progressImage }} %</v-progress-circular
       >
-    </v-snackbar> -->
+    </v-overlay>
   </v-card>
 </template>
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import firebase from '@/functions/upload'
+import ceditor from '@/components/editor'
 
 import { v4 as uuidv4 } from 'uuid'
-import moment from 'moment'
+// import moment from 'moment'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'AddPost',
+  components: {
+    ceditor
+  },
   data() {
     return {
-      // editor
-      editor: ClassicEditor,
-      editorConfig: {
-        mediaEmbed: {
-          previewsInData: true
-        },
-        toolbar: {
-          items: [
-            'heading',
-            '|',
-            'alignment:left',
-            'alignment:right',
-            'alignment:center',
-            'alignment:justify',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'indent',
-            'outdent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo'
-          ]
-        },
-        image: {
-          // Configure the available styles.
-          styles: ['alignLeft', 'alignCenter', 'alignRight'],
-
-          // You need to configure the image toolbar, too, so it shows the new style
-          // buttons as well as the resize buttons.
-          toolbar: [
-            'imageStyle:alignLeft',
-            'imageStyle:alignCenter',
-            'imageStyle:alignRight',
-            '|',
-            'imageTextAlternative'
-          ]
-        },
-        table: {
-          contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-        },
-        // This value must be kept in sync with the language defined in webpack.config.js.
-        language: 'en'
-      },
+      titleRules: [
+        (v) => !!v || 'ກະລຸນາໃສ່ຫົວຂໍ້ຂ່າວ',
+        (v) => (v && v.length <= 150) || 'ຫົວຂໍ້ຂ່າວບໍ່ຄວນຍາວເກີນໄປ'
+      ],
+      imageRules: false,
+      contentRules: false,
+      statusPost: false,
 
       // image
       orgImg: null,
@@ -231,47 +184,69 @@ export default {
     },
     ...mapActions('posts', ['createPost']),
     callCreatePost() {
-      this.notice['pending'] = !this.notice['pending']
-      this.canavImg.toBlob((blob) => {
-        let storageRef = firebase.storage().ref('images/' + uuidv4())
-        const uploadTask = storageRef.put(blob, blob.type)
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Observe state change events such as progress, pause, and resume
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            let progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log('Upload is ' + progress + '% done')
-            switch (snapshot.state) {
-              case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused')
-                break
-              case firebase.storage.TaskState.RUNNING: // or 'running'
-                console.log('Upload is running')
-                break
+      let vali = this.$refs.form.validate()
+
+      if (this.orgImg == null) {
+        this.imageRules = true
+        setTimeout(() => {
+          this.imageRules = false
+        }, 3000)
+        return
+      }
+
+      if (this.newPost['content'] == null) {
+        this.contentRules = true
+        setTimeout(() => {
+          this.contentRules = false
+        }, 3000)
+        return
+      }
+
+      if (this.canavImg && vali && this.newPost['content']) {
+        this.notice['pending'] = true
+        this.canavImg.toBlob((blob) => {
+          let storageRef = firebase.storage().ref('images/' + uuidv4())
+          const uploadTask = storageRef.put(blob, blob.type)
+          uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+              // Observe state change events such as progress, pause, and resume
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              let progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              this.progressImage = Math.round(progress)
+              // console.log('Upload is ' + progress + '% done')
+              switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                  console.log('Upload is paused')
+                  break
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                  console.log('Upload is running')
+                  break
+              }
+            },
+            (error) => {
+              // Handle unsuccessful uploads
+              console.log(error)
+            },
+            () => {
+              //   // Handle successful uploads on complete
+              //   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+              uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                this.newPost['image'] = downloadURL
+                // this.newPost['datePost'] = moment().format(
+                //   'MMMM Do YYYY, h:mm:ss a'
+                // )
+                this.newPost['statusPost'] = this.statusPost
+                // this.newPost['statusPost'] === true ? true : false
+                this.newPost['penname'] = 'Admin-VTE'
+                this.createPost(this.newPost)
+                this.notice['pending'] = false
+              })
             }
-          },
-          (error) => {
-            // Handle unsuccessful uploads
-            console.log(error)
-          },
-          () => {
-            //   // Handle successful uploads on complete
-            //   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-              this.newPost['image'] = downloadURL
-              this.newPost['datePost'] = moment().format(
-                'MMMM Do YYYY, h:mm:ss a'
-              )
-              this.newPost['statusPost'] =
-                this.newPost['statusPost'] === 'true' ? true : false
-              this.newPost['penname'] = 'Admin-VTE'
-              this.createPost(this.newPost)
-            })
-          }
-        )
-      })
+          )
+        })
+      }
       this.orgImg = null
       this.cropImg = null
 
@@ -283,17 +258,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.my-clipper {
-  width: 100%;
-  max-width: 500px;
-}
-
-.placeholder {
-  text-align: center;
-  /* padding: 20px;
-  background-color: whitesmoke; */
-  border-radius: 15px;
-  color: #36405a;
-}
-</style>

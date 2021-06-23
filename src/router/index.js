@@ -5,8 +5,13 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    redirect: '/dashboard',
+    path: '/redcross/login',
+    name: 'Login',
+    component: () => import('@/views/auth/Login.vue')
+  },
+  {
+    path: '/dashboard',
+    // redirect: '/dashboard',
     component: () => import('@/layouts/Index.vue'),
     children: [
       {
@@ -62,9 +67,52 @@ const routes = [
     ]
   },
   {
-    path: '/redcross/login',
-    name: 'Login',
-    component: () => import('@/views/auth/Login.vue')
+    path: '/',
+    redirect: '/home',
+    component: () => import('@/layouts/Index.vue'),
+    children: [
+      {
+        path: '/home',
+        name: 'Home',
+        component: () => import('@/views/pages/home')
+      }
+    ]
+  },
+  {
+    path: '/error',
+    component: () => import('@/views/error/error'),
+    children: [
+      {
+        path: '/error/400',
+        name: 'BadReq',
+        component: () => import('@/views/error/400')
+      },
+      {
+        path: '/error/403',
+        name: 'Forbidden',
+        component: () => import('@/views/error/403')
+      },
+      {
+        path: '/error/404',
+        name: 'NotFound',
+        component: () => import('@/views/error/404')
+      },
+      {
+        path: '/error/408',
+        name: 'ReqTimeout',
+        component: () => import('@/views/error/408')
+      },
+      {
+        path: '/error/500',
+        name: 'UnexpectedErr',
+        component: () => import('@/views/error/500')
+      }
+    ]
+  },
+  {
+    path: '*',
+    name: 'NotFoundPath',
+    component: () => import('@/views/error/404')
   }
 ]
 

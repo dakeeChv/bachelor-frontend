@@ -19,12 +19,13 @@ export default {
       alert: false,
       pending: false,
       message: '',
+      success: null,
       error: null
     }
   },
   actions: {
-    fetchPost({ commit }) {
-      return api()
+    async fetchPost({ commit }) {
+      return await api()
         .get(`post/read`)
         .then(({ data }) => {
           commit('setPost', data.data)
@@ -32,7 +33,7 @@ export default {
     },
     fetchCurrPost({ commit }, idCurr) {
       return api()
-        .get(`post/${idCurr}`)
+        .get(`post/read/${idCurr}`)
         .then(({ data }) => {
           commit('setCurrPost', data.data)
         })
@@ -54,7 +55,7 @@ export default {
     },
     deletePost({ commit, state }, currPost) {
       return api()
-        .delete(`post/${currPost._id}`)
+        .delete(`post/delete/${currPost._id}`)
         .then(({ data }) => {
           commit('removePost', currPost)
           commit('setNotice', data.notice)
@@ -68,7 +69,7 @@ export default {
     },
     editPost({ commit, state }) {
       return api()
-        .patch(`post/${state.currPost._id}`, state.currPost)
+        .patch(`post/update/${state.currPost._id}`, state.currPost)
         .then(({ data }) => {
           // console.log(state.currPost)
           commit('updatePost', state.currPost)

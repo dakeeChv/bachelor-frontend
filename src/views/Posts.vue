@@ -51,9 +51,26 @@
         <v-btn color="teal darken-3" icon @click="editPost(item)"
           ><v-icon small>fa-pencil-alt</v-icon></v-btn
         >
-        <v-btn color="red accent-3" icon @click="removePost(item)"
+        <v-btn color="red accent-3" icon @click="dialogRemove = true"
           ><v-icon small>fa-trash</v-icon></v-btn
         >
+        <v-dialog v-model="dialogRemove" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >ທ່ານແນ່ໃຈ ທີ່ຈະລົບໂພສນີ້ບໍ່?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="dialogRemove = false"
+                >ຍົກເລີກ</v-btn
+              >
+              <v-btn color="red darken-1" text @click="removePost(item)"
+                >ລົບໂພສນີ້</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-btn color="light-blue darken-1" icon @click="viewPost(item)"
           ><v-icon small>fa-eye</v-icon></v-btn
         >
@@ -85,7 +102,7 @@ export default {
         { text: 'ສະຖານະ', value: 'statusPost' },
         { text: 'ຈັດການ', value: 'action' }
       ],
-      indexCurr: null
+      dialogRemove: false
     }
   },
   mounted() {
@@ -120,6 +137,7 @@ export default {
       }
     },
     removePost(item) {
+      this.dialogRemove = false
       const storageRef = firebase.storage().refFromURL(item.image)
 
       // Delete the file
