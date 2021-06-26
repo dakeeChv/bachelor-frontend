@@ -118,7 +118,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import ceditor from '@/components/editor'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -139,7 +139,13 @@ export default {
       canavCover: null
     }
   },
+  mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/login' })
+    }
+  },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('guide', ['newGuide', 'notice'])
   },
   methods: {

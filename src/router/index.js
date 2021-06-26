@@ -10,6 +10,11 @@ const routes = [
     component: () => import('@/views/auth/Login.vue')
   },
   {
+    path: '/login',
+    name: 'Auth',
+    component: () => import('@/views/auth/Register.vue')
+  },
+  {
     path: '/dashboard',
     // redirect: '/dashboard',
     component: () => import('@/layouts/Index.vue'),
@@ -69,12 +74,22 @@ const routes = [
   {
     path: '/',
     redirect: '/home',
-    component: () => import('@/layouts/Index.vue'),
+    component: () => import('@/layouts/IndexClient.vue'),
     children: [
       {
         path: '/home',
         name: 'Home',
-        component: () => import('@/views/pages/home')
+        component: () => import('@/views/pages/Home')
+      },
+      {
+        path: '/news/view/:id',
+        name: 'View-News',
+        component: () => import('@/components/posts/ViewPost.vue')
+      },
+      {
+        path: '/guides',
+        name: 'View-Sugg',
+        component: () => import('@/views/pages/Guide')
       }
     ]
   },
@@ -86,6 +101,11 @@ const routes = [
         path: '/error/400',
         name: 'BadReq',
         component: () => import('@/views/error/400')
+      },
+      {
+        path: '/error/401',
+        name: 'Unauth',
+        component: () => import('@/views/error/401')
       },
       {
         path: '/error/403',

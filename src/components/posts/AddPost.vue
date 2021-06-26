@@ -146,7 +146,7 @@ import ceditor from '@/components/editor'
 
 import { v4 as uuidv4 } from 'uuid'
 // import moment from 'moment'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'AddPost',
@@ -171,7 +171,13 @@ export default {
       canavImg: null
     }
   },
+  mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/login' })
+    }
+  },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('posts', ['newPost', 'notice'])
   },
   methods: {

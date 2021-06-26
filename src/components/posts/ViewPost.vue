@@ -1,13 +1,5 @@
 <template>
   <v-card flat>
-    <v-row justify="center">
-      <v-img
-        class="result"
-        :aspect-ratio="16 / 9"
-        :src="currPost.image"
-        contain
-      ></v-img>
-    </v-row>
     <v-card-title>
       {{ currPost.title }}
     </v-card-title>
@@ -17,8 +9,17 @@
     <v-card-subtitle>
       {{ formatTime(currPost.createdAt) }}
     </v-card-subtitle>
+    <v-row justify="center">
+      <v-img
+        class="result"
+        height="500px"
+        :aspect-ratio="16 / 9"
+        :src="currPost.image"
+        contain
+      ></v-img>
+    </v-row>
     <!-- <v-card-text class="ck-content" v-html="currPost.content"> </v-card-text> -->
-    <div class="ck-content mx-8" v-html="currPost.content"></div>
+    <div class="ck-content mx-8 my-6" v-html="currPost.content"></div>
   </v-card>
 </template>
 <script>

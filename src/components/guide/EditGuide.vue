@@ -107,7 +107,7 @@
 import firebase from '@/functions/upload'
 import ceditor from '@/components/editor'
 
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -123,9 +123,13 @@ export default {
     }
   },
   mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/login' })
+    }
     this.cropCover = this.currGuide['cover']
   },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('guide', ['currGuide', 'notice'])
   },
   methods: {

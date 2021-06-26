@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLoggedIn">
     <div class="text-center">
       <v-alert
         ref="alert"
@@ -77,7 +77,7 @@
 </template>
 <script>
 import firebase from '@/functions/upload'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 export default {
   name: 'Guide',
   data: () => ({
@@ -101,9 +101,13 @@ export default {
     dialogRemove: false
   }),
   mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/login' })
+    }
     this.fetchGuide()
   },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('guide', ['guides', 'notice'])
   },
   methods: {

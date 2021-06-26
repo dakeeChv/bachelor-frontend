@@ -4,6 +4,7 @@ import createPersistedState from 'vuex-persistedstate'
 
 import posts from './posts'
 import guide from './guide'
+import auth from './auth'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,8 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     posts,
-    guide
+    guide,
+    auth
   },
   plugins: [createPersistedState()]
 })

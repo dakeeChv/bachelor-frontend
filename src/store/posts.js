@@ -18,9 +18,7 @@ export default {
     notice: {
       alert: false,
       pending: false,
-      message: '',
-      success: null,
-      error: null
+      message: ''
     }
   },
   actions: {
@@ -47,24 +45,17 @@ export default {
           commit('setNotice', data.notice)
         })
         .catch((err) => {
-          state.notice['error'] = !!err
-          setTimeout(() => {
-            state.notice['error'] = !err
-          }, 5000)
+          if (err) {
+            state.notice['pending'] = false
+          }
         })
     },
-    deletePost({ commit, state }, currPost) {
+    deletePost({ commit }, currPost) {
       return api()
         .delete(`post/delete/${currPost._id}`)
         .then(({ data }) => {
           commit('removePost', currPost)
           commit('setNotice', data.notice)
-        })
-        .catch((err) => {
-          state.notice['error'] = !!err
-          setTimeout(() => {
-            state.notice['error'] = !err
-          }, 5000)
         })
     },
     editPost({ commit, state }) {

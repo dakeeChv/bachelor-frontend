@@ -7,14 +7,15 @@ export default () => {
     baseURL: store.state.baseUrl,
     timeout: 7000,
     headers: {
-      Authorization: `Bearer`
+      Authorization: `Bearer`,
+      'auth-token': `${store.state.auth.token}`
     }
   })
   api.interceptors.response.use(null, (error) => {
     let path = '/error'
     switch (error.response.status) {
       case 401:
-        path = '/login'
+        path = '/error/401'
         break
       case 400:
         path = '/error/400'

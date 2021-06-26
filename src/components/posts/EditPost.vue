@@ -14,18 +14,6 @@
       >
         {{ notice.message }}
       </v-alert>
-      <v-alert
-        class="text-center"
-        v-model="notice.error"
-        border="left"
-        close-text="Close Alert"
-        color="success"
-        width="50%"
-        dark
-        dismissible
-      >
-        ເກີດຂໍ້ຜິດພາດ
-      </v-alert>
     </div>
     <!-- ຫົວຂໍ້ start -->
     <v-toolbar flat class="mx-6 mb-6">
@@ -101,11 +89,15 @@
       </v-row>
       <v-row align="center" justify="space-around" class="px-4">
         <v-col cols="12" md="11" sm="12">
-          <ckeditor
+          <!-- <ckeditor
             :editor="editor"
             v-model="currPost.content"
             :config="editorConfig"
-          ></ckeditor>
+          ></ckeditor> -->
+          <ceditor
+            :content.sync="currPost.content"
+            @onInput="(c) => (this.currPost['content'] = c)"
+          />
         </v-col>
       </v-row>
       <v-row align="center" justify="center">
@@ -145,67 +137,19 @@
   </v-card>
 </template>
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import ceditor from '@/components/editor'
 import firebase from '@/functions/upload'
 
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'EditPost',
+  components: {
+    ceditor
+  },
   data() {
     return {
-      // editor
-      editor: ClassicEditor,
-      editorConfig: {
-        mediaEmbed: {
-          previewsInData: true
-        },
-        toolbar: {
-          items: [
-            'heading',
-            '|',
-            'alignment:left',
-            'alignment:right',
-            'alignment:center',
-            'alignment:justify',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'indent',
-            'outdent',
-            '|',
-            'imageUpload',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'undo',
-            'redo'
-          ]
-        },
-        image: {
-          // Configure the available styles.
-          styles: ['alignLeft', 'alignCenter', 'alignRight'],
-
-          // You need to configure the image toolbar, too, so it shows the new style
-          // buttons as well as the resize buttons.
-          toolbar: [
-            'imageStyle:alignLeft',
-            'imageStyle:alignCenter',
-            'imageStyle:alignRight',
-            '|',
-            'imageTextAlternative'
-          ]
-        },
-        table: {
-          contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-        },
-        // This value must be kept in sync with the language defined in webpack.config.js.
-        language: 'en'
-      },
-
       // image
       orgImg: null,
 
@@ -216,9 +160,13 @@ export default {
     }
   },
   mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/login' })
+    }
     this.cropImg = this.currPost['image']
   },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('posts', ['currPost', 'notice'])
   },
   methods: {

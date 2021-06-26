@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLoggedIn">
     <div class="text-center">
       <v-alert
         ref="alert"
@@ -87,7 +87,7 @@ import firebase from '@/functions/upload'
 // import 'firebase/storage'
 // firebase.initializeApp(firebaseConfig)
 
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -106,9 +106,13 @@ export default {
     }
   },
   mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/login' })
+    }
     this.fetchPost()
   },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('posts', ['posts', 'notice'])
   },
   methods: {

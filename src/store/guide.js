@@ -44,6 +44,11 @@ export default {
           commit('setNewGuide', {})
           commit('setNotice', data.notice)
         })
+        .catch((err) => {
+          if (err) {
+            state.notice['pending'] = false
+          }
+        })
     },
     editGuide({ commit, state }) {
       return api()
