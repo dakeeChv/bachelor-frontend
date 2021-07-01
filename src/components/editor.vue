@@ -16,9 +16,9 @@ export default {
       // editor
       editor: ClassicEditor,
       editorConfig: {
-        mediaEmbed: {
-          previewsInData: true
-        },
+        // mediaEmbed: {
+        //   previewsInData: true
+        // },
         toolbar: {
           items: [
             'heading',

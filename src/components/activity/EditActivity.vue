@@ -17,7 +17,7 @@
     </div>
     <!-- ຫົວຂໍ້ start -->
     <v-toolbar flat class="mx-6 mb-6">
-      <v-toolbar-title class="text-h5"> ເພີ່ມກິດຈະກຳໃໝ່</v-toolbar-title>
+      <v-toolbar-title class="text-h5"> ແກ້ໄຂກິດຈະກຳ</v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
     <!-- ຫົວຂໍ້ end -->
@@ -26,7 +26,7 @@
       <v-row justify="center">
         <v-col md="5" sm="12">
           <v-text-field
-            v-model="newActivity.title"
+            v-model="currActivity.title"
             prepend-icon="fa-calendar-day"
             label="ຫົວຂໍ້ກິດຈະກຳ"
             color="redcross"
@@ -35,7 +35,7 @@
             counter="150"
             required
           ></v-text-field>
-          <v-radio-group v-model="status">
+          <v-radio-group v-model="currActivity.status">
             <template v-slot:label>
               <div><strong>ກຳນົດສະຖານະຂອງກິດຈະກຳ</strong></div>
             </template>
@@ -53,7 +53,7 @@
         </v-col>
         <v-col md="5" sm="12">
           <v-date-picker
-            v-model="dateAt"
+            v-model="currActivity.dateAt"
             color="red accent-4"
             multiple
             full-width
@@ -65,13 +65,13 @@
           <v-dialog
             ref="dialogOfStart"
             v-model="dialogOfStart"
-            :return-value.sync="timeStart"
+            :return-value.sync="currActivity.timeStart"
             persistent
             max-width="500px"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="timeStart"
+                v-model="currActivity.timeStart"
                 label="ເລືອກເວລາເລີ່ມງານ"
                 color="redcross"
                 prepend-icon="mdi-clock-time-four-outline"
@@ -81,7 +81,11 @@
                 :rules="timeStartRules"
               ></v-text-field>
             </template>
-            <v-time-picker v-if="dialogOfStart" v-model="timeStart" landscape>
+            <v-time-picker
+              v-if="dialogOfStart"
+              v-model="currActivity.timeStart"
+              landscape
+            >
               <v-spacer></v-spacer>
               <v-btn text color="redcross" @click="dialogOfStart = false"
                 >ຍົກເລີກ</v-btn
@@ -89,7 +93,7 @@
               <v-btn
                 text
                 color="redcross"
-                @click="$refs.dialogOfStart.save(timeStart)"
+                @click="$refs.dialogOfStart.save(currActivity.timeStart)"
                 >ຕົກລົງ</v-btn
               >
             </v-time-picker>
@@ -99,13 +103,13 @@
           <v-dialog
             ref="dialogOfEnd"
             v-model="dialogOfEnd"
-            :return-value.sync="timeEnd"
+            :return-value.sync="currActivity.timeEnd"
             persistent
             max-width="500px"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="timeEnd"
+                v-model="currActivity.timeEnd"
                 label="ເລືອກເວລາສິ້ນສຸດງານ"
                 color="redcross"
                 prepend-icon="mdi-clock-time-four-outline"
@@ -115,7 +119,11 @@
                 :rules="timeEndRules"
               ></v-text-field>
             </template>
-            <v-time-picker v-if="dialogOfEnd" v-model="timeEnd" landscape>
+            <v-time-picker
+              v-if="dialogOfEnd"
+              v-model="currActivity.timeEnd"
+              landscape
+            >
               <v-spacer></v-spacer>
               <v-btn text color="redcross" @click="dialogOfEnd = false"
                 >ຍົກເລີກ</v-btn
@@ -123,7 +131,7 @@
               <v-btn
                 text
                 color="redcross"
-                @click="$refs.dialogOfEnd.save(timeEnd)"
+                @click="$refs.dialogOfEnd.save(currActivity.timeEnd)"
                 >ຕົກລົງ</v-btn
               >
             </v-time-picker>
@@ -141,8 +149,8 @@
             ກະລຸນາໃສ່ເນື້ອຫາຂ່າວ
           </v-btn>
           <ceditor
-            :content.sync="newActivity.content"
-            @onInput="(c) => (this.newActivity['content'] = c)"
+            :content.sync="currActivity.content"
+            @onInput="(c) => (this.currActivity['content'] = c)"
           />
         </v-col>
       </v-row>
@@ -151,7 +159,7 @@
           dark
           color="green darken-3"
           class="my-6 mr-4"
-          @click="callCreateActivity"
+          @click="callEditActivity"
           >ບັນທຶກ</v-btn
         >
         <v-btn dark depressed color="redcross" class="my-6" @click="goBack"
@@ -173,20 +181,19 @@ export default {
   },
   data() {
     return {
-      // dateAt: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-      //   .toISOString()
-      //   .substr(0, 10),
-      dateAt: null,
+      //   dateAt: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      //     .toISOString()
+      //     .substr(0, 10),
       dialogOfStart: false,
-      timeStart: null,
+      //   timeStart: null,
       dialogOfEnd: false,
-      timeEnd: null,
-      status: false,
+      //   timeEnd: null,
+      //   status: false,
 
       //validate
       titleRules: [
         (v) => !!v || 'ກະລຸນາໃສ່ຫົວຂໍ້ງານກິດຈະກຳ',
-        (v) => (!!v && v.length <= 150) || 'ຫົວຂໍ້ງານກິດຈະກຳທີ່ບໍ່ຄວນຍາວເກີນໄປ'
+        (v) => (v && v.length <= 150) || 'ຫົວຂໍ້ງານກິດຈະກຳທີ່ບໍ່ຄວນຍາວເກີນໄປ'
       ],
       dateAtRules: [(v) => !!v || 'ກະລຸນາໃສ່ວັນທີ່ເລີ່ມກິດຈະກຳ'],
       timeStartRules: [(v) => !!v || 'ກະລຸນາໃສ່ເວລາເລີ່ມກິດຈະກຳ'],
@@ -200,37 +207,26 @@ export default {
     }
   },
   computed: {
+    // ...mapState('address', ['currAddress']),
     ...mapGetters('auth', ['isLoggedIn']),
-    ...mapState('address', ['currAddress']),
-    ...mapState('activity', ['newActivity', 'notice'])
+    ...mapState('activity', ['currActivity', 'notice'])
   },
   methods: {
     goBack() {
       return this.$router.go(-1)
     },
-    ...mapActions('activity', ['createActivity']),
-    callCreateActivity() {
+    ...mapActions('activity', ['editActivity']),
+    callEditActivity() {
       let valid = this.$refs.formActivity.validate()
-      if (!valid || !this.newActivity['content'] || !this.dateAt) {
+      if (!valid || !this.currActivity['content']) {
         this.contentRules = true
         return
       }
-      this.newActivity['addressId'] = this.currAddress['_id']
-      this.newActivity['timeStart'] = this.timeStart
-      this.newActivity['timeEnd'] = this.timeEnd
-      this.newActivity['dateAt'] = this.dateAt
-      this.newActivity['status'] = this.status
-      this.createActivity()
-
+      this.editActivity()
+      //   console.log(this.currActivity)
       let alertEle = this.$refs['alert']
       var top = alertEle.offsetTop
       window.scrollTo(0, top)
-      this.$refs.formActivity.resetValidation()
-      // this.timeStart = null
-      // this.timeEnd = null
-      // this.dateAt = null
-      // this.status = false
-      // this.contentRules = false
     }
   }
 }

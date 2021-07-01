@@ -5,6 +5,8 @@ import createPersistedState from 'vuex-persistedstate'
 import posts from './posts'
 import guide from './guide'
 import auth from './auth'
+import address from './address'
+import activity from './activity'
 
 Vue.use(Vuex)
 
@@ -17,7 +19,9 @@ export default new Vuex.Store({
   modules: {
     posts,
     guide,
-    auth
+    auth,
+    address,
+    activity
   },
   plugins: [createPersistedState()]
 })

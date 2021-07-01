@@ -50,6 +50,26 @@ const routes = [
         component: () => import('@/views/Activity.vue')
       },
       {
+        path: '/address/add',
+        name: 'Add-Address',
+        component: () => import('@/components/activity/AddAddress.vue')
+      },
+      {
+        path: '/activity/add/',
+        name: 'Add-Activity',
+        component: () => import('@/components/activity/AddActivity.vue')
+      },
+      {
+        path: '/activity/edit/:id',
+        name: 'Edit-Activity',
+        component: () => import('@/components/activity/EditActivity.vue')
+      },
+      {
+        path: '/activity/view/:id',
+        name: 'View-Activity',
+        component: () => import('@/components/activity/ViewActivity.vue')
+      },
+      {
         path: '/guide',
         name: 'Guide',
         component: () => import('@/views/Guide.vue')
@@ -90,6 +110,11 @@ const routes = [
         path: '/guides',
         name: 'View-Sugg',
         component: () => import('@/views/pages/Guide')
+      },
+      {
+        path: '/activity/calendar',
+        name: 'Calendar-Activity',
+        component: () => import('@/views/pages/Calendar')
       }
     ]
   },

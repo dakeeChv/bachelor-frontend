@@ -1,5 +1,20 @@
 <template>
   <div>
+    <div class="text-center">
+      <v-alert
+        ref="alert"
+        class="mx-auto"
+        v-model="notice.alert"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
+      >
+        {{ notice.message }}
+      </v-alert>
+    </div>
     <v-data-table
       :headers="headers"
       :items="activities"
@@ -18,7 +33,7 @@
         <v-toolbar flat>
           <v-toolbar-title class="text-h5">ກິດຈະກຳ</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="red accent-4" outlined rounded>
+          <v-btn color="red accent-4" outlined rounded to="/address/add">
             <v-icon left>fa-plus</v-icon>
             ເພີ່ມກິດຈະກຳ
           </v-btn>
@@ -108,11 +123,14 @@
       <template v-slot:[`item.title`]="{ item }">
         <div class="body-2 text-justify">{{ item.title }}</div>
       </template>
-      <template v-slot:[`item.image`]="{ item }">
+      <template v-slot:[`item.dateAt`]="{ item }">
+        <div class="body-2 text-justify">{{ dataRangText(item.dateAt) }}</div>
+      </template>
+      <!-- <template v-slot:[`item.image`]="{ item }">
         <v-avatar class="ma-2">
           <v-img :src="item.image"></v-img>
         </v-avatar>
-      </template>
+      </template> -->
       <template v-slot:[`item.status`]="{ item }">
         <v-chip
           :class="[
@@ -138,10 +156,10 @@
         <v-btn color="teal darken-3" icon @click="editActivity(item)">
           <v-icon small>fa-pencil-alt</v-icon>
         </v-btn>
-        <v-btn color="red accent-3" icon>
+        <v-btn color="red accent-3" icon @click="removeActivity(item)">
           <v-icon small>fa-trash</v-icon>
         </v-btn>
-        <v-btn color="light-blue darken-1" icon>
+        <v-btn color="light-blue darken-1" icon @click="viewActivity(item)">
           <v-icon small>fa-eye</v-icon>
         </v-btn>
       </template>
@@ -149,6 +167,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   data: () => ({
     date: '',
@@ -157,23 +176,22 @@ export default {
     filterStatus: [],
     headers: [
       {
-        text: 'ພາບຫົວຂໍ້ກິດຈະກຳ',
-        value: 'image',
-        align: 'start',
-        width: '150px'
-      },
-      {
         text: 'ຫົວຂໍ້ກິດຈະກຳ',
         value: 'title',
         width: '50%'
       },
       {
-        text: 'ວັນ/ເວລາ ເລີ່ມງານ',
+        text: 'ວັນທີ',
+        value: 'dateAt',
+        width: '150px'
+      },
+      {
+        text: 'ເວລາເລີ່ມງານ',
         value: 'timeStart',
         width: '150px'
       },
       {
-        text: 'ວັນ/ເວລາ ສິ້ນສຸດງານ',
+        text: 'ເວລາສິ້ນສຸດງານ',
         value: 'timeEnd',
         width: '150px'
       },
@@ -189,63 +207,52 @@ export default {
         align: 'center',
         width: '100%'
       }
-    ],
-    activities: [
-      {
-        activityId: 1,
-        title: 'ເພາະການໃຫ້ ໄດ້ຫຼາຍກວ່າທີ່ທ່ານຄິດ',
-        latitude: '',
-        longtitude: '',
-        content:
-          'ຂໍເຊີນທຸກໆທ່ານຮ່ວມບໍລິຈາກເລືອດເພື່ອຊ່ວຍເຫຼືອຄົນເຈັບທີ່ນອນປີ່ນປົວຢູ່ຕາມໂຮງໝໍຕ່າງໆທົ່ວປະເທດ🅰️🅱️🅾️🆎',
-        image:
-          'https://scontent.fvte2-1.fna.fbcdn.net/v/t1.6435-9/188482567_4016023235151891_195435522285531011_n.jpg?_nc_cat=105&ccb=1-3&_nc_sid=973b4a&_nc_ohc=umuL-TuHqHwAX-e9_0H&_nc_ht=scontent.fvte2-1.fna&oh=cdcbd2be4819f8350a104f2516c3cbfe&oe=60DB69EB',
-        status: true,
-        timeStart: new Date(),
-        timeEnd: ''
-      },
-      {
-        activityId: 2,
-        title: 'COVID-19 ກໍ່ຢ້ານ ແຕ່ການຕອບສະໜອງເລືອດໃຫ້ຄົນເຈັບກໍ່ຈຳເປັນ',
-        latitude: '',
-        longtitude: '',
-        content: `ເລືອດຂອງທ່ານນັ້ນມີຄ່າ ການບໍລິຈາກເລືອດໜື່ງຄັ້ງສາມາດຊ່ວຍເຫຼືອຄົນເຈັບໄດ້ ເຖິງ3ຊີວິດ...
-ຂໍເຊີນທຸກໆທ່ານຮ່ວມບໍລິຈາກເລືອດເພື່ອຊ່ວຍເຫຼືອຄົນເຈັບທີ່ນອນປີ່ນປົວຢູ່ຕາມໂຮງໝໍຕ່າງໆທົ່ວປະເທດ🅰️🅱️🅾️🆎
-
-ທ່ານສາມາດບໍລິຈາກເລືອດ🩸ໄດ້ທີ່ :
-📍ສູນເລືອດແຫ່ງຊາດ
-ຕັ້ງຢູ່ທີ່ ບ້ານຊຽງຍືນ ມ.ຈັນທະບູລີ ນະຄອນຫຼວງວຽງຈັນ
-📍ສູນເລືອດແຂວງ ທົ່ວປະເທດ
-ສອບຖາມຂໍ້ມູນໂທຣ: 030 548 7539`,
-        image:
-          'https://scontent.fvte2-2.fna.fbcdn.net/v/t1.6435-9/187391205_4013230398764508_8275543212726410992_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=973b4a&_nc_ohc=FvLY6Dtk4XcAX-vOHqf&_nc_ht=scontent.fvte2-2.fna&oh=e01b91dbf0ec8707115fe37bc57ab073&oe=60D91DED',
-        status: true,
-        timeStart: '',
-        timeEnd: ''
-      },
-      {
-        activityId: 3,
-        title:
-          'ຂໍເຊີນທຸກທ່ານຮ່ວມໃຈກັນມາ“ບໍລິຈາກເລືອດແບບປອດໄພ ອຸ່ນໃຈທັງຜູ້ໃຫ້ ສຸກໃຈທັງຜູ້ຮັບ',
-        latitude: '',
-        longtitude: '',
-        content: `ເນື່ອງຈາກການລະບາດຂອງເຊື້ອພະຍາດ Covid-19 ຮອບ 2 👿
-ສູນເລືອດແຫ່ງຊາດ ແລະ ສູນເລືອດແຂວງທົ່ວປະເທດ
-ຂາດເລືອດໜັກ ຂໍເຊີນຊວນຄົນລາວທີ່ມີສຸຂະພາບແຂງແຮງດີບໍລິຈາກເລືອດເພື່ອຊ່ວຍເຫຼືອຄົນເຈັບທີ່ຢູ່ຕາມໂຮງໝໍແຫ່ງຕ່າງໆທົ່ວປະເທດ🅰️🅱️🅾️🆎`,
-        image:
-          'https://scontent.fvte2-2.fna.fbcdn.net/v/t1.6435-9/186532577_4004733436280871_5491220868238557294_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=973b4a&_nc_ohc=t-Y630SVN68AX_iKPa8&_nc_ht=scontent.fvte2-2.fna&oh=1aa1fec787b703991a69325f0c4eddb2&oe=60D8B140',
-        status: false,
-        timeStart: '',
-        timeEnd: ''
-      }
     ]
   }),
+  mounted() {
+    this.fetchActivity()
+    this.notice['alert'] = false
+  },
+  computed: {
+    ...mapState('activity', ['activities', 'notice'])
+  },
   methods: {
+    ...mapActions('activity', ['fetchActivity', 'deleteActivity']),
+    ...mapMutations('activity', ['setCurrActivity']),
     getStatus(status) {
       return status ? 'ເປີດກິດຈະກຳ' : 'ປິດກິດຈະກຳ'
     },
-    editAcitivity(item) {
-      console.log(item)
+    dataRangText(dateAt) {
+      // return dateAt.join(' ຫາ ')
+      if (dateAt.length > 1) {
+        return dateAt[0] + ' ຫາ ' + dateAt[dateAt.length - 1]
+      }
+      return dateAt[0]
+    },
+    editActivity(item) {
+      let id = item._id
+      this.setCurrActivity(item)
+      if (item) {
+        return this.$router.push({
+          path: `/activity/edit/${id}`
+        })
+      }
+    },
+    removeActivity(item) {
+      this.deleteActivity(item)
+      let alertEle = this.$refs['alert']
+      var top = alertEle.offsetTop
+      window.scrollTo(0, top)
+    },
+    viewActivity(item) {
+      let id = item._id
+      this.setCurrActivity(item)
+      //  console.log(item)
+      if (item) {
+        return this.$router.push({
+          path: `/activity/view/${id}`
+        })
+      }
     }
   }
 }

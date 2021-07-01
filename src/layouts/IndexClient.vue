@@ -33,12 +33,12 @@
         v-if="$vuetify.breakpoint.width < 600"
         @click.stop="drawer = !drawer"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>Client</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <!-- <v-toolbar-title></v-toolbar-title>
+      <v-spacer></v-spacer> -->
       <template v-if="$vuetify.breakpoint.width >= 600" v-slot:extension>
         <v-tabs color="redcross" class="white--text" centered>
           <v-tab to="/home">ໜ້າຫຼັກ</v-tab>
-          <v-tab>ປະຕິທິນກິດຈະກຳ</v-tab>
+          <v-tab to="/activity/calendar">ປະຕິທິນກິດຈະກຳ</v-tab>
           <v-tab to="/guides">ຄູ່ມື ແລະ ແຫຼ່ງຮູ້ຂໍ້ມູນ</v-tab>
           <v-tab>ກ່ຽວກັບພວກເຮົາ</v-tab>
         </v-tabs>
