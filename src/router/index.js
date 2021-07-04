@@ -112,9 +112,19 @@ const routes = [
         component: () => import('@/views/pages/Guide')
       },
       {
+        path: '/guides/:id',
+        name: 'View-gui',
+        component: () => import('@/components/guide/ViewGuide')
+      },
+      {
         path: '/activity/calendar',
         name: 'Calendar-Activity',
         component: () => import('@/views/pages/Calendar')
+      },
+      {
+        path: '/activity/:id',
+        name: 'View-Activi',
+        component: () => import('@/components/activity/ViewActivity')
       }
     ]
   },

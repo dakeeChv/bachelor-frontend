@@ -70,6 +70,7 @@ export default {
         .then(({ data }) => {
           // console.log(data.data)
           commit('setCalendar', data.data)
+          commit('setNotice', data.notice)
         })
     }
   },

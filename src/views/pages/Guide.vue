@@ -1,36 +1,46 @@
 <template>
   <div>
-    <v-card>
-      <div class="d-flex flex-no-wrap justify-space-between">
-        <div>
-          <v-card-title class="text-h5" v-text="dfddf"></v-card-title>
-
-          <v-card-subtitle v-text="dsfdf"></v-card-subtitle>
-
-          <v-card-actions>
-            <v-btn class="ml-2 mt-3" fab icon height="40px" right width="40px">
-              <v-icon>mdi-play</v-icon>
-            </v-btn>
-
-            <v-btn class="ml-2 mt-5" outlined rounded small>
-              START RADIO
-            </v-btn>
-          </v-card-actions>
-        </div>
-
-        <v-avatar class="ma-3" size="125" tile>
+    <v-row justify="center" no-gutters v-for="guide in guides" :key="guide._id">
+      <v-card width="800px" class="mb-4" @click="viewGuide(guide)">
+        <div class="d-flex">
           <v-img
-            src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fdocs.servicestack.net%2Ftemplates-vuetify&psig=AOvVaw0XVJuMaPlx0pS0ZPjkqdyF&ust=1624615269988000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCPDMr9OBsPECFQAAAAAdAAAAABAD"
-          ></v-img>
-        </v-avatar>
-      </div>
-    </v-card>
+            class="white--text align-end"
+            aspect-ratio="16/9"
+            min-height="168px"
+            max-width="300px"
+            :src="guide.cover"
+          >
+          </v-img>
+          <div class="ml-6 pa-4">
+            <p style="width: 400px" class="text-h5 text-justify">
+              {{ guide.title }}
+            </p>
+          </div>
+        </div>
+      </v-card>
+    </v-row>
   </div>
 </template>
 <script>
+import { mapMutations, mapState } from 'vuex'
 export default {
   data() {
     return {}
+  },
+  computed: {
+    ...mapState('guide', ['guides'])
+  },
+  methods: {
+    ...mapMutations('guide', ['setCurrGuide']),
+    viewGuide(item) {
+      let id = item._id
+      this.setCurrGuide(item)
+      if (item) {
+        return this.$router.push({
+          path: `/guides/${id}`
+        })
+      }
+    }
   }
 }
 </script>

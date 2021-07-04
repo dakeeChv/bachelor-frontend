@@ -6,29 +6,39 @@
       </div>
     </v-card>
 
-    <v-row class="mt-6" align="center">
-      <v-date-picker v-model="pickDate" color="redcross" flat></v-date-picker>
+    <v-row class="mt-6" align="center" justify="center">
+      <v-date-picker
+        v-model="pickDate"
+        color="redcross"
+        width="600px"
+        flat
+      ></v-date-picker>
     </v-row>
-    <v-row align="center" justify="space-around">
+    <v-alert
+      border="top"
+      class="mt-6 text-h6 font-weight-bold text-center mx-auto pa-4"
+      color="redcross"
+      width="600px"
+      dark
+    >
+      ກິດຈະກຳ {{ pickDate || today }}
+    </v-alert>
+    <div v-if="notice.pending" class="text-center">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        color="redcross"
+        indeterminate
+      ></v-progress-circular>
+    </div>
+    <v-row v-else align="center" justify="space-around">
       <v-col v-for="date in calendar" :key="date._id" cols="12" md="4">
-        <v-card
-          color="red darken-2"
-          max-height="300px"
-          flat
-          outlined
-          dark
-          @click="callViewActivity(date)"
-        >
+        <v-card max-height="300px" @click="callViewActivity(date)">
           <v-card-title class="text-h6 d-flex justify-space-around">
-            <!-- <div>
-              <v-icon left>far fa-calendar-alt</v-icon>
-              <span class="font-weight-bold">ວັນທີ</span>
-              <div class="pl-7">2021-07-07</div>
-            </div> -->
             <div>
               <v-icon left>far fa-clock</v-icon>
-              <span class="font-weight-bold white--text">ເວລາ</span>
-              <span class="pl-7 white--text"
+              <span class="font-weight-bold">ເວລາ</span>
+              <span class="pl-7"
                 >{{ date.timeStart }} - {{ date.timeEnd }}</span
               >
             </div>
@@ -47,6 +57,12 @@
         </v-card>
       </v-col>
     </v-row>
+    <div
+      class="mt-6 text-center text-h6 text--secondary"
+      v-if="!calendar.length"
+    >
+      ບໍ່ມີກິດຈະກຳໃນວັນນີ້
+    </div>
   </div>
 </template>
 <script>
@@ -62,7 +78,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('activity', ['calendar'])
+    ...mapState('activity', ['calendar', 'notice'])
   },
   mounted() {
     this.fetchCalendar(this.today)
@@ -75,7 +91,7 @@ export default {
       this.setCurrActivity(item)
       if (item) {
         return this.$router.push({
-          path: `/activity/view/${id}`
+          path: `/activity/${id}`
         })
       }
     }
@@ -85,6 +101,7 @@ export default {
     pickDate: function (val) {
       // console.log(val)
       if (val) {
+        this.notice['pending'] = true
         return this.fetchCalendar(val)
         // for (let c in this.calendar) {
         //    console.log(this.calendar[c].title)

@@ -1,21 +1,24 @@
 <template>
-  <v-card flat>
-    <v-row justify="center">
+  <div>
+    <v-row style="background: #f7f7f7" justify="center">
       <v-img
         class="result"
         :aspect-ratio="16 / 9"
         :src="currGuide.cover"
-        contain
+        max-width="1000px"
+        min-height="562px"
       ></v-img>
     </v-row>
-    <v-card-title>
-      {{ currGuide.title }}
-    </v-card-title>
-    <v-card-subtitle>
-      {{ formatTime(currGuide.createdAt) }}
-    </v-card-subtitle>
-    <div class="ck-content mx-8" v-html="currGuide.content"></div>
-  </v-card>
+    <v-card class="mt-6 pa-8" flat color="#f7f7f7">
+      <v-card-title>
+        {{ currGuide.title }}
+      </v-card-title>
+      <v-card-subtitle>
+        {{ formatTime(currGuide.createdAt) }}
+      </v-card-subtitle>
+      <div class="ck-content pa-8" v-html="currGuide.content"></div>
+    </v-card>
+  </div>
 </template>
 <script>
 import moment from 'moment'

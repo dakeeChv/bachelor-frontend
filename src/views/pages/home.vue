@@ -11,7 +11,11 @@
       </v-carousel-item>
     </v-carousel>
     <div class="mt-12">
-      <div class="text-h3">ຂ່າວປະຊາສຳພັນ</div>
+      <v-card flat color="#f7f7f7">
+        <div class="text-h4 font-weight-bold text-center pa-4">
+          ຂ່າວປະຊາສຳພັນ
+        </div>
+      </v-card>
       <v-row class="mt-6">
         <v-col v-for="post in posts" :key="post.id" cols="12" md="4" sm="6">
           <v-hover>
