@@ -5,7 +5,7 @@ import router from '@/router'
 export default () => {
   const api = axios.create({
     baseURL: store.state.baseUrl,
-    timeout: 10000,
+    timeout: 30000,
     headers: {
       Authorization: `Bearer`,
       'auth-token': `${store.state.auth.token}`

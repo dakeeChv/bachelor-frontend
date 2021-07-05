@@ -104,6 +104,7 @@ export default {
     if (!this.isLoggedIn) {
       return this.$router.push({ path: '/login' })
     }
+    this.notice['alert'] = false
     this.fetchGuide()
   },
   computed: {
