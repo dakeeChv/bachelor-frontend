@@ -102,7 +102,7 @@ export default {
   }),
   mounted() {
     if (!this.isLoggedIn) {
-      return this.$router.push({ path: '/login' })
+      return this.$router.push({ path: '/redcross/login' })
     }
     this.notice['alert'] = false
     this.fetchGuide()

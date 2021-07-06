@@ -167,7 +167,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
 export default {
   data: () => ({
     date: '',
@@ -210,10 +210,14 @@ export default {
     ]
   }),
   mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/redcross/login' })
+    }
     this.fetchActivity()
     this.notice['alert'] = false
   },
   computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
     ...mapState('activity', ['activities', 'notice'])
   },
   methods: {

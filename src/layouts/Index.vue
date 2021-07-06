@@ -169,6 +169,7 @@ export default {
     if (!this.isLoggedIn) {
       return this.$router.push({ path: '/login' })
     }
+    // console.log(this.account._id)
   },
   computed: {
     ...mapState('auth', ['account']),

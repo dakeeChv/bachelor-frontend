@@ -9,12 +9,12 @@
     >
       <v-tabs-slider></v-tabs-slider>
 
-      <v-tab href="#tab-login">
+      <v-tab v-if="!isLoggedIn" href="#tab-login">
         ເຂົ້າສູ່ລະບົບ
         <v-icon>fa-sign-in-alt</v-icon>
       </v-tab>
 
-      <v-tab href="#tab-register">
+      <v-tab v-if="isLoggedIn" href="#tab-register">
         ສ້າງບັນຊີ
         <v-icon>fa-user-circle</v-icon>
       </v-tab>
@@ -34,7 +34,7 @@
           <v-col>
             <v-form ref="formRegister">
               <v-text-field
-                v-model="account.username"
+                v-model="regisAcc.username"
                 :rules="usernameRules"
                 label="ຊື່ບັນຊີຜູ້ໃຊ້"
                 dense
@@ -42,7 +42,7 @@
                 rounded
               ></v-text-field>
               <v-text-field
-                v-model="account.email"
+                v-model="regisAcc.email"
                 :rules="emailRules"
                 label="ອີເມວ"
                 dense
@@ -50,7 +50,7 @@
                 rounded
               ></v-text-field>
               <v-text-field
-                v-model="account.firstName"
+                v-model="regisAcc.firstName"
                 :rules="firstNameRules"
                 label="ຊື່"
                 dense
@@ -58,7 +58,7 @@
                 rounded
               ></v-text-field>
               <v-text-field
-                v-model="account.lastName"
+                v-model="regisAcc.lastName"
                 :rules="lastNameRules"
                 label="ນາມສະກຸນ"
                 dense
@@ -66,7 +66,7 @@
                 rounded
               ></v-text-field>
               <v-text-field
-                v-model="account.password"
+                v-model="regisAcc.password"
                 :rules="passwordRules"
                 :type="showPassword ? 'text' : 'password'"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -83,6 +83,7 @@
                   depressed
                   rounded
                   dark
+                  @click="callRegister"
                 >
                   ສ້າງບັນຊີ
                 </v-btn>
@@ -145,7 +146,7 @@
   </v-card>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -174,10 +175,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['account', 'loginAcc', 'isLoggedIn'])
+    ...mapGetters('auth', ['isLoggedIn']),
+    ...mapState('auth', ['regisAcc', 'loginAcc'])
   },
   methods: {
-    ...mapActions('auth', ['login']),
+    ...mapActions('auth', ['login', 'register']),
     callLogin() {
       let valid = this.$refs.formLogin.validate()
       // console.log(valid)
@@ -187,6 +189,13 @@ export default {
       }
       // this.login()
       // console.log(this.account)
+    },
+    callRegister() {
+      let valid = this.$refs.formRegister.validate()
+      // console.log(this.regisAcc)
+      if (valid) {
+        this.register()
+      }
     }
   }
 }

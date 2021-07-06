@@ -15,10 +15,19 @@ export default {
   state: {
     account: {},
     loginAcc: {},
-    registerAcc: null,
+    regisAcc: {},
     token: null
   },
   actions: {
+    register({ state }) {
+      return api()
+        .post('adacc/register', state.regisAcc)
+        .then((response) => {
+          if (response.data['adUser']) {
+            return router.push({ path: '/dashboard' })
+          }
+        })
+    },
     login({ commit, state }) {
       return api()
         .post('/adacc/login', state.loginAcc)
@@ -33,7 +42,7 @@ export default {
     },
     logout({ commit }) {
       commit('setToken', null)
-      return router.push({ path: '/login' })
+      return router.push({ path: '/redcross/login' })
     }
   },
   getters: {
