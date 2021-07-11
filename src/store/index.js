@@ -7,6 +7,8 @@ import guide from './guide'
 import auth from './auth'
 import address from './address'
 import activity from './activity'
+import authSocial from './authSocial'
+import bloodGroup from './bloodGroup'
 
 Vue.use(Vuex)
 
@@ -21,7 +23,9 @@ export default new Vuex.Store({
     guide,
     auth,
     address,
-    activity
+    activity,
+    authSocial,
+    bloodGroup
   },
   plugins: [createPersistedState()]
 })

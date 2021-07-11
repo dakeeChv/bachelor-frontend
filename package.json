@@ -23,6 +23,7 @@
     "vue": "~2.6.11",
     "vue-browser-geolocation": "^1.8.0",
     "vue-chartjs": "~3.5.1",
+    "vue-google-oauth2": "^1.5.8",
     "vue-router": "~3.2.0",
     "vue-rx": "~6.2.0",
     "vue2-leaflet": "^2.7.0",

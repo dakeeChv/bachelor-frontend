@@ -7,7 +7,7 @@ export default () => {
     baseURL: store.state.baseUrl,
     timeout: 30000,
     headers: {
-      Authorization: `Bearer`,
+      Authorization: `Bearer ${store.state.authSocial.idToken}`,
       'auth-token': `${store.state.auth.token}`
     }
   })

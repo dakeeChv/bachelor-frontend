@@ -4,15 +4,20 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/redcross/login',
-  //   name: 'Login',
-  //   component: () => import('@/views/auth/Login.vue')
-  // },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: () => import('@/views/auth/SignUp.vue')
+  },
+  {
+    path: '/signin',
+    name: 'SignIn',
+    component: () => import('@/views/auth/SignIn.vue')
+  },
   {
     path: '/redcross/login',
     name: 'Auth',
-    component: () => import('@/views/auth/Register.vue')
+    component: () => import('@/views/auth/AuthAdmin.vue')
   },
   {
     path: '/dashboard',
