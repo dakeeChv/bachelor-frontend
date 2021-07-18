@@ -183,17 +183,22 @@ export default {
       {
         text: 'ວັນທີ',
         value: 'dateAt',
-        width: '150px'
+        width: '125px'
       },
       {
         text: 'ເວລາເລີ່ມງານ',
         value: 'timeStart',
-        width: '150px'
+        width: '100px'
       },
       {
         text: 'ເວລາສິ້ນສຸດງານ',
         value: 'timeEnd',
-        width: '150px'
+        width: '100px'
+      },
+      {
+        text: 'ລະຫັດງານ',
+        value: 'verifyCode',
+        width: '100px'
       },
       {
         text: 'ສະຖານະ',

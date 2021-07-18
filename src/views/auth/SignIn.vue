@@ -58,8 +58,8 @@
           </v-form>
           <v-divider class="mt-12 mb-4"></v-divider>
           <div class="text--primary">
-            ຖ້າຫາກທ່ານບໍ່ມີ ຫຼື ບໍ່ໄດ້ສະໝັກບັນຊີ <br />
-            ສາມາດເຂົ້າສະໝັກທີ່ໜ້າ
+            ຖ້າຫາກທ່ານບໍ່ມີ ຫຼື ບໍ່ໄດ້ລົງທະບຽນ <br />
+            ສາມາດເຂົ້າລົງທະບຽນທີ່ໜ້າ
             <router-link class="ml-2 redcross--text" to="/signup"
               ><v-icon color="redcross" small left>fa-arrow-right</v-icon>Sign
               Up</router-link

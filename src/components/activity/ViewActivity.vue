@@ -57,6 +57,9 @@ export default {
   mounted() {
     this.fetchCurrActivity()
   },
+  // created () {
+  //   this.fetchCurrActivity()
+  // },
   computed: {
     ...mapState('activity', ['currActivity']),
     centerMap() {

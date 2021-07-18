@@ -9,6 +9,8 @@ import address from './address'
 import activity from './activity'
 import authSocial from './authSocial'
 import bloodGroup from './bloodGroup'
+import donation from './donation'
+import request from './request'
 
 Vue.use(Vuex)
 
@@ -25,7 +27,9 @@ export default new Vuex.Store({
     address,
     activity,
     authSocial,
-    bloodGroup
+    bloodGroup,
+    donation,
+    request
   },
   plugins: [createPersistedState()]
 })

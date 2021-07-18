@@ -167,7 +167,7 @@ export default {
   }),
   mounted() {
     if (!this.isLoggedIn) {
-      return this.$router.push({ path: '/login' })
+      return this.$router.push({ path: '/redcross/login' })
     }
     // console.log(this.account._id)
   },

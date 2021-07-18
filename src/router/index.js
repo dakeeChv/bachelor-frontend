@@ -130,6 +130,46 @@ const routes = [
         path: '/activity/:id',
         name: 'View-Activi',
         component: () => import('@/components/activity/ViewActivity')
+      },
+      {
+        path: '/donor',
+        name: 'Recoord-Donor',
+        component: () => import('@/views/pages/Donor')
+      },
+      {
+        path: '/history',
+        name: 'History-Donation',
+        component: () => import('@/views/pages/History')
+      },
+      {
+        path: '/donor/history/detail',
+        name: 'History-Detail',
+        component: () => import('@/components/activity/ViewActivity')
+      },
+      {
+        path: '/aboutus',
+        name: 'About-Us',
+        component: () => import('@/views/pages/AboutUs')
+      },
+      {
+        path: '/myrequest',
+        name: 'MyRequest',
+        component: () => import('@/views/pages/MyRequest')
+      },
+      {
+        path: '/myrequest/add',
+        name: 'Add-MyRequest',
+        component: () => import('@/components/pages/AddRequest')
+      },
+      {
+        path: '/view/request/:id',
+        name: 'View-Request',
+        component: () => import('@/components/pages/ViewRequest')
+      },
+      {
+        path: '/edit/request/:id',
+        name: 'Edit-Request',
+        component: () => import('@/components/pages/EditRequest')
       }
     ]
   },

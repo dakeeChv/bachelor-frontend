@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 
+import VueOtp2 from 'vue-otp-2'
+Vue.use(VueOtp2)
+
 import '@/assets/sass/index.sass'
 import '@fortawesome/fontawesome-free/css/all.css'
 // import 'font-awesome/css/font-awesome.min.css' // Old fontawesome 4.7

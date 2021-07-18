@@ -276,7 +276,7 @@
           </v-stepper>
           <v-divider class="mt-4 mb-4"></v-divider>
           <div class="text--primary">
-            ຖ້າຫາກທ່ານມີ ການສະໝັກດ້ວຍບັນຊີຢູ່ແລ້ວ <br />
+            ຖ້າຫາກທ່ານມີ ການລົງທະບຽນຢູ່ແລ້ວ <br />
             ສາມາດເຂົ້າສູ່ລະບົບທີ່ໜ້າ
             <router-link class="ml-2 redcross--text" to="/signin"
               ><v-icon color="redcross" small left>fa-arrow-right</v-icon>Sign

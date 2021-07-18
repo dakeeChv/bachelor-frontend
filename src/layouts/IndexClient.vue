@@ -43,11 +43,21 @@
           <v-tab to="/home">ໜ້າຫຼັກ</v-tab>
           <v-tab to="/activity/calendar">ປະຕິທິນກິດຈະກຳ</v-tab>
           <v-tab to="/guides">ຄູ່ມື ແລະ ແຫຼ່ງຮູ້ຂໍ້ມູນ</v-tab>
-          <v-tab>ກ່ຽວກັບພວກເຮົາ</v-tab>
+          <v-tab to="/aboutus">ກ່ຽວກັບພວກເຮົາ</v-tab>
         </v-tabs>
       </template>
       <v-spacer></v-spacer>
-      <div class="hidden-xs-only">
+      <v-btn
+        v-if="!isSignIn"
+        depressed
+        outlined
+        rounded
+        color="redcross"
+        class="font-weight-bold"
+        to="/signin"
+        >ເຂົ້າສູ່ລະບົບ</v-btn
+      >
+      <div v-if="isSignIn">
         <v-menu bottom min-width="100px" offset-y>
           <template v-slot:activator="{ on }">
             <div v-on="on">
@@ -96,9 +106,23 @@
                   rounded
                   text
                 >
-                  <v-icon left>mdi-badge-account-horizontal</v-icon>
+                  <v-icon left color="redcross"
+                    >mdi-badge-account-horizontal</v-icon
+                  >
                   ອັບເດດຂໍ້ມູນບັນຊີ
                 </v-btn>
+                <v-btn to="/donor" depressed rounded text>
+                  <v-icon left color="redcross">fa-sign-in-alt</v-icon>
+                  ເຂົ້າຮ່ວມບໍລິຈາກ</v-btn
+                >
+                <v-btn to="/history" depressed rounded text>
+                  <v-icon left color="redcross">fa-book</v-icon>
+                  ບັນທຶກຂອງຂ້ອຍ</v-btn
+                >
+                <v-btn to="/myrequest" depressed rounded text>
+                  <v-icon left color="redcross">fa-hand-holding-water</v-icon>
+                  ການຮ້ອງຂໍ</v-btn
+                >
               </div>
             </v-list-item-content>
           </v-card>
@@ -141,7 +165,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
   data: () => ({
     icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
@@ -155,7 +179,7 @@ export default {
       {
         text: 'ປະຕິທິນກິດຈະກຳ',
         icon: 'fa-calendar-alt',
-        path: ''
+        path: '/activity/calendar'
       },
       {
         text: 'ຄູ່ມື ແລະ ແຫຼ່ງຮູ້ຂໍ້ມູນ',
@@ -165,12 +189,13 @@ export default {
       {
         text: 'ກ່ຽວກັບພວກເຮົາ',
         icon: 'fa-info',
-        path: ''
+        path: '/aboutus'
       }
     ]
   }),
   computed: {
-    ...mapState('authSocial', ['donorInfo'])
+    ...mapState('authSocial', ['donorInfo']),
+    ...mapGetters('authSocial', ['isSignIn'])
   },
   methods: {
     ...mapActions('authSocial', ['signout'])

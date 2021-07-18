@@ -19,6 +19,13 @@ export default () => {
           path = '/error/401'
           break
         case 400:
+          if (error.response.data === 'Invalid Token') {
+            store.state.authSocial.idToken = null
+            return router.push({ path: '/signin' })
+          } else if (error.response.data === 'Admin: Invalid Token') {
+            store.state.auth.token = null
+            return router.push({ path: '/redcross/login' })
+          }
           path = '/error/400'
           break
         case 403:
