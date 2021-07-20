@@ -68,14 +68,15 @@
                     :src="account.image"
                   ></v-img>
                 </v-avatar>
-                <h3>{{ account.firstName }}</h3>
+                <br />
+                <!-- <h3>{{ account.firstName }}</h3>
                 <p class="caption mt-1">
                   {{ account.lastName }}
-                </p>
+                </p> -->
                 <v-btn
                   small
                   rounded
-                  class="text-subtitle-2 font-weight-bold white--text"
+                  class="text-subtitle-2 font-weight-bold white--text mt-2"
                   color="red darken-1"
                   @click="logout"
                 >
@@ -85,7 +86,11 @@
                 <v-divider class="my-3"></v-divider>
               </div>
               <div class="px-12">
-                <v-btn
+                <h3>{{ account.firstName }}</h3>
+                <p class="caption mt-1">
+                  {{ account.lastName }}
+                </p>
+                <!-- <v-btn
                   class="d-flex justify-start"
                   active-class="lighter-1 white--text"
                   depressed
@@ -94,7 +99,7 @@
                 >
                   <v-icon left>mdi-badge-account-horizontal</v-icon>
                   ອັບເດດຂໍ້ມູນບັນຊີ
-                </v-btn>
+                </v-btn> -->
               </div>
             </v-list-item-content>
           </v-card>
@@ -158,9 +163,9 @@ export default {
       { text: 'ຂ່າວສານ', icon: 'far fa-newspaper', path: '/posts' },
       { text: 'ກິດຈະກຳ', icon: 'fa-calendar-day', path: '/activity' },
       {
-        text: 'ປະຫວັດການຮັບບໍລິຈາກ',
+        text: 'ລາຍງານການຮ້ອງຂໍ',
         icon: 'fa-file-medical-alt',
-        path: '/record'
+        path: '/allrequest'
       },
       { text: 'ຄູ່ມື', icon: 'fa-book', path: '/guide' }
     ]

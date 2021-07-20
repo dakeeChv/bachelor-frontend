@@ -142,7 +142,7 @@
         </v-chip>
       </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn
+        <!-- <v-btn
           small
           :class="[
             !!item.status ? 'teal darken-3' : 'red darken-3',
@@ -151,7 +151,7 @@
           icon
         >
           <v-icon small>fa-power-off</v-icon>
-        </v-btn>
+        </v-btn> -->
         <span class="ma-2"> | </span>
         <v-btn color="teal darken-3" icon @click="editActivity(item)">
           <v-icon small>fa-pencil-alt</v-icon>
@@ -159,6 +159,27 @@
         <v-btn color="red accent-3" icon @click="removeActivity(item)">
           <v-icon small>fa-trash</v-icon>
         </v-btn>
+        <v-dialog
+          v-model="dialogRemove"
+          max-width="500px"
+          :retain-focus="false"
+        >
+          <v-card>
+            <v-card-title class="text-h5"
+              >ທ່ານແນ່ໃຈ ທີ່ຈະລົບໂພສນີ້ບໍ່?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="dialogRemove = false"
+                >ຍົກເລີກ</v-btn
+              >
+              <v-btn color="red darken-1" text @click="comfirmRemoveActivity"
+                >ລົບໂພສນີ້</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-btn color="light-blue darken-1" icon @click="viewActivity(item)">
           <v-icon small>fa-eye</v-icon>
         </v-btn>
@@ -212,7 +233,8 @@ export default {
         align: 'center',
         width: '100%'
       }
-    ]
+    ],
+    dialogRemove: false
   }),
   mounted() {
     if (!this.isLoggedIn) {
@@ -223,7 +245,7 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
-    ...mapState('activity', ['activities', 'notice'])
+    ...mapState('activity', ['activities', 'notice', 'currActivity'])
   },
   methods: {
     ...mapActions('activity', ['fetchActivity', 'deleteActivity']),
@@ -248,7 +270,12 @@ export default {
       }
     },
     removeActivity(item) {
-      this.deleteActivity(item)
+      this.dialogRemove = true
+      this.setCurrActivity(item)
+    },
+    comfirmRemoveActivity() {
+      this.dialogRemove = false
+      this.deleteActivity(this.currActivity)
       let alertEle = this.$refs['alert']
       var top = alertEle.offsetTop
       window.scrollTo(0, top)

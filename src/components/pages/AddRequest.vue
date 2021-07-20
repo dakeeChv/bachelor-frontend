@@ -179,6 +179,7 @@ export default {
     if (!this.isSignIn) {
       return this.$router.push({ path: '/signin' })
     }
+    this.fetchBloodGroup()
     this.notice['pending'] = false
     this.notice['alert'] = false
   },
@@ -197,6 +198,7 @@ export default {
       this.cropImg = this.canavImg.toDataURL('image/png', 1) //canvas->image
     },
     ...mapActions('request', ['createRequest']),
+    ...mapActions('bloodGroup', ['fetchBloodGroup']),
     callCreateRequest() {
       let vali = this.$refs.form.validate()
 

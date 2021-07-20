@@ -58,14 +58,14 @@
               <v-btn color="red darken-1" text @click="dialogRemove = false"
                 >ຍົກເລີກ</v-btn
               >
-              <v-btn color="red darken-1" text @click="removeGuide(item)"
+              <v-btn color="red darken-1" text @click="comfirmRemoveGuide"
                 >ລົບຄູ່ມືນີ້</v-btn
               >
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-btn color="red accent-3" icon @click="dialogRemove = true"
+        <v-btn color="red accent-3" icon @click="removeGuide(item)"
           ><v-icon small>fa-trash</v-icon></v-btn
         >
         <v-btn color="light-blue darken-1" icon @click="viewGuide(item)"
@@ -109,7 +109,7 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
-    ...mapState('guide', ['guides', 'notice'])
+    ...mapState('guide', ['guides', 'notice', 'currGuide'])
   },
   methods: {
     ...mapMutations('guide', ['setCurrGuide']),
@@ -124,15 +124,19 @@ export default {
       }
     },
     removeGuide(item) {
+      this.dialogRemove = true
+      this.setCurrGuide(item)
+    },
+    comfirmRemoveGuide() {
       this.dialogRemove = false
-      const storageRef = firebase.storage().refFromURL(item.cover)
+      const storageRef = firebase.storage().refFromURL(this.currGuide.cover)
 
       // Delete the file
       storageRef
         .delete()
         .then(() => {
           // File deleted successfully
-          this.deleteGuide(item)
+          this.deleteGuide(this.currGuide)
         })
         .catch((error) => {
           // Uh-oh, an error occurred!

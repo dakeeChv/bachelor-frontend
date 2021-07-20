@@ -3,7 +3,9 @@ import api from '../api'
 export default {
   namespaced: true,
   state: {
-    listRequest: [],
+    listRequestCli: [],
+    allRequestAdm: [],
+    helper: [],
     myRequest: [],
     newRequest: {},
     currRequest: {},
@@ -56,6 +58,38 @@ export default {
           commit('setCurrRequest', state.currRequest)
           commit('setNotice', data.notice)
         })
+    },
+    fetchFromAnother({ commit }, { donorId, bloodGroup }) {
+      return api()
+        .get('/request/client', {
+          params: {
+            donorId: donorId,
+            bloodGroup: bloodGroup
+          }
+        })
+        .then(({ data }) => {
+          commit('setListRequest', data.data)
+        })
+    },
+    fetchHelper({ commit }, requestor) {
+      return api()
+        .get('donate/helper', {
+          params: {
+            requestor: requestor
+          }
+        })
+        .then(({ data }) => {
+          commit('setHelper', data.data)
+        })
+    },
+
+    //Admin
+    fetchAllRequest({ commit }) {
+      return api()
+        .get('request/admin')
+        .then(({ data }) => {
+          commit('setAllRequest', data.data)
+        })
     }
   },
   getters: {},
@@ -64,7 +98,7 @@ export default {
       state.myRequest = myRequest
     },
     setListRequest(state, listRequest) {
-      state.listRequest = listRequest
+      state.listRequestCli = listRequest
     },
     appendMyRequest(state, newRequest) {
       state.myRequest.unshift(newRequest)
@@ -92,6 +126,12 @@ export default {
         1,
         currRequest
       )
+    },
+    setAllRequest(state, allRequest) {
+      state.allRequestAdm = allRequest
+    },
+    setHelper(state, helper) {
+      state.helper = helper
     }
   }
 }

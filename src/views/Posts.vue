@@ -51,10 +51,14 @@
         <v-btn color="teal darken-3" icon @click="editPost(item)"
           ><v-icon small>fa-pencil-alt</v-icon></v-btn
         >
-        <v-btn color="red accent-3" icon @click="dialogRemove = true"
+        <v-btn color="red accent-3" icon @click="removePost(item)"
           ><v-icon small>fa-trash</v-icon></v-btn
         >
-        <v-dialog v-model="dialogRemove" max-width="500px">
+        <v-dialog
+          v-model="dialogRemove"
+          max-width="500px"
+          :retain-focus="false"
+        >
           <v-card>
             <v-card-title class="text-h5"
               >ທ່ານແນ່ໃຈ ທີ່ຈະລົບໂພສນີ້ບໍ່?</v-card-title
@@ -64,7 +68,7 @@
               <v-btn color="red darken-1" text @click="dialogRemove = false"
                 >ຍົກເລີກ</v-btn
               >
-              <v-btn color="red darken-1" text @click="removePost(item)"
+              <v-btn color="red darken-1" text @click="comfirmRemovePost"
                 >ລົບໂພສນີ້</v-btn
               >
               <v-spacer></v-spacer>
@@ -114,7 +118,7 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
-    ...mapState('posts', ['posts', 'notice'])
+    ...mapState('posts', ['posts', 'notice', 'currPost'])
   },
   methods: {
     ...mapActions('posts', ['fetchPost', 'deletePost']),
@@ -142,15 +146,19 @@ export default {
       }
     },
     removePost(item) {
+      this.dialogRemove = true
+      this.setCurrPost(item)
+    },
+    comfirmRemovePost() {
       this.dialogRemove = false
-      const storageRef = firebase.storage().refFromURL(item.image)
+      const storageRef = firebase.storage().refFromURL(this.currPost.image)
 
       // Delete the file
       storageRef
         .delete()
         .then(() => {
           // File deleted successfully
-          this.deletePost(item)
+          this.deletePost(this.currPost)
         })
         .catch((error) => {
           // Uh-oh, an error occurred!

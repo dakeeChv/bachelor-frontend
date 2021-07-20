@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card flat color="#f7f7f7">
-      <div class="text-h4 font-weight-bold text-center pa-4">
+      <div class="text-h5 font-weight-bold text-center pa-4">
         ປະຕິທິນການຮັບບໍລິຈາກເລືອດ
       </div>
     </v-card>

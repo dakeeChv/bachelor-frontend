@@ -93,6 +93,11 @@ const routes = [
         path: '/guide/view/:id',
         name: 'View-Guide',
         component: () => import('@/components/guide/ViewGuide.vue')
+      },
+      {
+        path: '/allrequest',
+        name: 'All-Request',
+        component: () => import('@/components/request/AllRequest')
       }
     ]
   },
@@ -170,6 +175,11 @@ const routes = [
         path: '/edit/request/:id',
         name: 'Edit-Request',
         component: () => import('@/components/pages/EditRequest')
+      },
+      {
+        path: '/request/list',
+        name: 'Public-Request',
+        component: () => import('@/views/pages/PublicRequest')
       }
     ]
   },

@@ -84,7 +84,7 @@ export default {
   },
   methods: {
     ...mapActions('authSocial', ['signInDonor']),
-    ...mapMutations('authSocial', ['setIdToken']),
+    ...mapMutations('authSocial', ['setIdToken', 'setExpires']),
     signInWithGoogle() {
       this.$gAuth
         .signIn()
@@ -96,12 +96,13 @@ export default {
           //   google: GoogleUser
           // }
           let id_token = GoogleUser.getAuthResponse().id_token
+          let expires_at = GoogleUser.getAuthResponse().expires_at
+          this.setExpires(expires_at)
           // console.log(id_token)
           // console.log(GoogleUser.getAuthResponse())
           this.setIdToken(id_token)
 
           // router.push('/home')
-          // console.log(userInfo)
           this.signInDonor()
           let alertEle = this.$refs['alert']
           let top = alertEle.offsetTop

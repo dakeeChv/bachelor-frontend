@@ -17,6 +17,7 @@ export default {
     // isAuthorized: null,
     donorInfo: {},
     idToken: null,
+    expires_at: null,
     notice: {
       alert: false,
       donorExist: false,
@@ -84,6 +85,9 @@ export default {
         state.notice['donorExist'] = false
         state.notice['message'] = ''
       }, 5000)
+    },
+    setExpires(state, expires_at) {
+      state.expires_at = expires_at
     }
   }
 }
