@@ -15,25 +15,48 @@
         {{ notice.message }}
       </v-alert>
     </div>
+    <!-- ຫົວຂໍ້ start -->
     <v-toolbar flat class="mx-6 mb-6">
-      <v-toolbar-title class="text-h5"> ເພີ່ມຄູ່ມື</v-toolbar-title>
+      <v-toolbar-title class="text-h5"> ເພີ່ມການຮ້ອງຂໍ</v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
+    <!-- ຫົວຂໍ້ end -->
+    <!-- ຟອມເພີ່ມຂ່າວ start -->
     <v-form ref="form">
-      <v-row class="px-12" align="center" justify="space-around">
+      <v-row align="center" justify="space-around" class="px-12">
         <v-col cols="12" md="6" sm="12">
           <v-text-field
-            v-model="newGuide.title"
-            label="Title"
-            prepend-icon="fa-header"
+            v-model="newRequest.title"
+            prepend-inner-icon="fa-scroll"
+            label="ຫົວຂໍ້ການຮ້ອງຂໍ"
             color="redcross"
+            prefix=" "
             :rules="titleRules"
-            counter="150"
             required
           ></v-text-field>
+          <v-select
+            v-model="newRequest.bloodReq"
+            :items="bloodGroup"
+            item-text="ABO"
+            item-value="_id"
+            label="ເລືອກກຼຸບເລືອດ"
+            chips
+            prepend-icon="fa-tint"
+            filled
+            rounded
+            required
+            color="redcross"
+            :rules="rulesField"
+          >
+            <template v-slot:selection="{ item }">
+              <v-chip>
+                <span>{{ item.ABO }}</span>
+              </v-chip>
+            </template></v-select
+          >
           <div class="d-flex flex-row justify-center">
             <v-btn class="mr-6" color="redcross" outlined rounded
-              ><clipper-upload v-model="orgCover" rules="">
+              ><clipper-upload v-model="orgImg">
                 <v-icon left>fa-file-upload</v-icon
                 >ອັບໂຫຼດຮູບພາບ</clipper-upload
               ></v-btn
@@ -43,7 +66,7 @@
               class="mr-4"
               color="amber darken-4"
               small
-              @click="getResultCover"
+              @click="getResultImg"
             >
               <v-icon small>fa-crop-alt</v-icon>
             </v-btn>
@@ -52,47 +75,56 @@
             </v-btn>
           </div>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" md="12">
           <div class="d-flex flex-row justify-space-around">
             <clipper-fixed
-              v-if="!!orgCover"
+              v-if="!!orgImg"
               class="my-clipper"
               ref="clipper"
-              :src="orgCover"
+              :src="orgImg"
               preview="my-preview"
               :ratio="16 / 9"
             >
               <div class="placeholder" slot="placeholder"></div>
             </clipper-fixed>
-            <div class="d-flex flex-row justify-center">
+            <!-- <clipper-preview name="my-preview" class="my-clipper">
+              <div class="placeholder" slot="placeholder"></div>
+            </clipper-preview> -->
+            <div class="text-center">
               <v-img
-                v-if="cropCover"
+                v-if="cropImg"
                 class="result"
-                :src="cropCover"
-                max-width="500"
+                :src="cropImg"
+                width="100%"
+                max-width="500px"
                 style="border-style: dashed"
-              ></v-img>
+              />
             </div>
           </div>
         </v-col>
       </v-row>
       <v-row align="center" justify="space-around" class="px-4">
         <v-col cols="12" md="11" sm="12">
+          <!-- <ckeditor
+            :editor="editor"
+            v-model="newPost.content"
+            :config="editorConfig"
+          ></ckeditor> -->
           <ceditor
-            :content.sync="newGuide.content"
-            @onInput="(c) => (this.newGuide['content'] = c)"
+            :content.sync="newRequest.content"
+            @onInput="(c) => (this.newRequest['content'] = c)"
           />
-          <v-btn v-if="contentRules" text class="mr-4" color="redcross" small>
-            ກະລຸນາໃສ່ເນື້ອຫາຄູ່ມື
-          </v-btn>
         </v-col>
+        <v-btn v-if="contentRules" text class="mr-4" color="redcross" small>
+          ກະລຸນາໃສ່ເນື້ອຫາຂອງການຮ້ອງຂໍ
+        </v-btn>
       </v-row>
       <v-row align="center" justify="center">
         <v-btn
           dark
           color="green darken-3"
           class="my-6 mr-4"
-          @click="callCreateGuide"
+          @click="callCreateRequest"
           >ບັນທຶກ</v-btn
         >
         <v-btn dark depressed color="redcross" class="my-6" @click="goBack"
@@ -105,62 +137,72 @@
         :rotate="180"
         :size="64"
         :width="8"
-        :value="progress"
+        :value="progressImage"
         color="redcross"
-        >{{ progress }} %</v-progress-circular
+        >{{ progressImage }} %</v-progress-circular
       >
     </v-overlay>
   </v-card>
 </template>
 <script>
-import firebase from '@/functions/upload'
-import { v4 as uuidv4 } from 'uuid'
-
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import firebase from '@/functions/upload'
 import ceditor from '@/components/editor'
-import { mapActions, mapGetters, mapState } from 'vuex'
+
+import { v4 as uuidv4 } from 'uuid'
+// import moment from 'moment'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
+  name: 'AddRequest',
   components: {
     ceditor
   },
-  data: () => {
+  data() {
     return {
       titleRules: [
-        (v) => !!v || 'ກະລຸນາໃສ່ຊື່ຄູ່ມື',
-        (v) => (v && v.length <= 150) || 'ຊື່ຄູ່ມືບໍ່ຄວນຍາວເກີນໄປ'
+        (v) => !!v || 'ກະລຸນາໃສ່ຫົວຂໍ້ການຮ້ອງຂໍ',
+        (v) => (v && v.length <= 150) || 'ຫົວຂໍ້ບໍ່ຄວນຍາວເກີນໄປ'
       ],
       imageRules: false,
       contentRules: false,
-      // cover
-      orgCover: null,
-      cropCover: null,
-      progress: null,
-      canavCover: null
+      rulesField: [(v) => !!v || 'ກະລຸນາໃສ່ຂໍ້ມູນ'],
+      // image
+      orgImg: null,
+      // cropped: false,
+      cropImg: null,
+      progressImage: null,
+      canavImg: null
     }
   },
   mounted() {
-    if (!this.isLoggedIn) {
-      return this.$router.push({ path: '/login' })
+    if (!this.isSignIn) {
+      return this.$router.push({ path: '/signin' })
     }
+    this.fetchBloodGroup()
+    this.notice['pending'] = false
+    this.notice['alert'] = false
   },
   computed: {
-    ...mapGetters('auth', ['isLoggedIn']),
-    ...mapState('guide', ['newGuide', 'notice'])
+    ...mapState('request', ['newRequest', 'notice']),
+    ...mapState('bloodGroup', ['bloodGroup']),
+    ...mapGetters('authSocial', ['isSignIn']),
+    ...mapState('authSocial', ['donorInfo'])
   },
   methods: {
     goBack() {
       return this.$router.go(-1)
     },
-    getResultCover: function () {
-      this.canavCover = this.$refs.clipper.clip() //call component's clip method
-      this.cropCover = this.canavCover.toDataURL('image/png', 1) //canvas->image
+    getResultImg: function () {
+      this.canavImg = this.$refs.clipper.clip() //call component's clip method
+      this.cropImg = this.canavImg.toDataURL('image/png', 1) //canvas->image
     },
-    ...mapActions('guide', ['createGuide']),
-    callCreateGuide() {
+    ...mapActions('request', ['createRequest']),
+    ...mapActions('bloodGroup', ['fetchBloodGroup']),
+    callCreateRequest() {
       let vali = this.$refs.form.validate()
 
-      if (this.orgCover == null) {
+      if (this.orgImg == null) {
         this.imageRules = true
         setTimeout(() => {
           this.imageRules = false
@@ -168,7 +210,7 @@ export default {
         return
       }
 
-      if (this.newGuide['content'] == null) {
+      if (this.newRequest['content'] == null) {
         this.contentRules = true
         setTimeout(() => {
           this.contentRules = false
@@ -176,10 +218,10 @@ export default {
         return
       }
 
-      if (this.canavCover && vali && !!this.newGuide['content']) {
+      if (this.canavImg && vali && this.newRequest['content']) {
         this.notice['pending'] = true
-        this.canavCover.toBlob((blob) => {
-          let storageRef = firebase.storage().ref('covers/' + uuidv4())
+        this.canavImg.toBlob((blob) => {
+          let storageRef = firebase.storage().ref('requests/' + uuidv4())
           const uploadTask = storageRef.put(blob, blob.type)
           uploadTask.on(
             'state_changed',
@@ -188,7 +230,7 @@ export default {
               // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
               let progress =
                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-              this.progress = Math.round(progress)
+              this.progressImage = Math.round(progress)
               // console.log('Upload is ' + progress + '% done')
               switch (snapshot.state) {
                 case firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -206,17 +248,28 @@ export default {
             () => {
               //   // Handle successful uploads on complete
               //   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-              uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                this.newGuide['cover'] = downloadURL
-                this.createGuide(this.newGuide)
-                this.newGuide['pending'] = false
-              })
+              uploadTask.snapshot.ref
+                .getDownloadURL()
+                .then(async (downloadURL) => {
+                  this.newRequest['image'] = downloadURL
+                  this.newRequest['requestor'] = this.donorInfo['_id']
+                  // this.newPost['datePost'] = moment().format(
+                  //   'MMMM Do YYYY, h:mm:ss a'
+                  // )
+                  // this.newPost['statusPost'] === true ? true : false
+                  // this.newPost['penname'] = 'Admin-VTE'
+                  await this.createRequest()
+                  this.notice['pending'] = false
+                  this.newRequest['content'] = ''
+                  this.$refs.form.reset()
+                  this.$refs.form.resetValidation()
+                })
             }
           )
         })
       }
-      this.orgCover = null
-      this.cropCover = null
+      this.orgImg = null
+      this.cropImg = null
 
       // go to alert
       let alertEle = this.$refs['alert']

@@ -1,17 +1,23 @@
 <template>
-  <div>
-    <div class="mb-4 d-flex flex-row justify-space-between">
-      <div>
-        <h3>ຂ່າວທັງໝົດ</h3>
-      </div>
-      <v-btn color="red accent-4" outlined rounded to="/posts/add">
-        <v-icon left>fa4 fa-plus</v-icon>
-        ເພີ່ມຂ່າວ</v-btn
+  <div v-if="isLoggedIn">
+    <div class="text-center">
+      <v-alert
+        ref="alert"
+        class="mx-auto"
+        v-model="notice.alert"
+        border="left"
+        close-text="Close Alert"
+        color="success"
+        width="50%"
+        dark
+        dismissible
       >
+        {{ notice.message }}
+      </v-alert>
     </div>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="posts"
       :items-per-page="5"
       item-key="title"
       class="elevation-1"
@@ -23,34 +29,69 @@
         nextIcon: 'mdi-plus'
       }"
     >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title class="text-h5">ຂ່າວທັງໝົດ</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn color="red accent-4" outlined rounded to="/posts/add">
+            <v-icon left>fa-plus</v-icon>
+            ເພີ່ມຂ່າວ
+          </v-btn>
+        </v-toolbar>
+      </template>
       <template v-slot:[`item.statusPost`]="{ item }">
-        <v-chip :color="getColor(item.statusPost)" dark>
+        <v-chip
+          :class="[item.statusPost ? 'green darken-2' : 'red darken-3']"
+          dark
+        >
           {{ getStatus(item.statusPost) }}
         </v-chip>
       </template>
       <template v-slot:[`item.action`]="{ item }">
-        <v-btn
-          depressed
-          small
-          color="teal darken-3"
-          class="white--text mr-2"
-          @click="editPost(item)"
-          >Edit</v-btn
+        <v-btn color="teal darken-3" icon @click="editPost(item)"
+          ><v-icon small>fa-pencil-alt</v-icon></v-btn
         >
-        <v-btn
-          depressed
-          small
-          color="red accent-3"
-          class="white--text"
-          @click="removePost(item)"
-          >Remove</v-btn
+        <v-btn color="red accent-3" icon @click="removePost(item)"
+          ><v-icon small>fa-trash</v-icon></v-btn
+        >
+        <v-dialog
+          v-model="dialogRemove"
+          max-width="500px"
+          :retain-focus="false"
+        >
+          <v-card>
+            <v-card-title class="text-h5"
+              >ທ່ານແນ່ໃຈ ທີ່ຈະລົບໂພສນີ້ບໍ່?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" text @click="dialogRemove = false"
+                >ຍົກເລີກ</v-btn
+              >
+              <v-btn color="red darken-1" text @click="comfirmRemovePost"
+                >ລົບໂພສນີ້</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-btn color="light-blue darken-1" icon @click="viewPost(item)"
+          ><v-icon small>fa-eye</v-icon></v-btn
         >
       </template>
     </v-data-table>
-    <router-view></router-view>
+    <!-- <h1>{{ posts }}</h1>
+    <h1>Hello</h1> -->
   </div>
 </template>
 <script>
+import firebase from '@/functions/upload'
+// import firebase from 'firebase/app'
+// import firebaseConfig from '@/functions/upload'
+// import 'firebase/storage'
+// firebase.initializeApp(firebaseConfig)
+
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -58,85 +99,71 @@ export default {
         {
           text: 'ຊື່ຫົວຂໍ້ຂ່າວ',
           align: 'start',
-          value: 'title'
+          value: 'title',
+          width: '50%'
         },
-        { text: 'ເວລາທີ່ສ້າງ', value: 'datePost' },
+        { text: 'ເວລາທີ່ຟໂພສ', value: 'datePost' },
         { text: 'ສະຖານະ', value: 'statusPost' },
         { text: 'ຈັດການ', value: 'action' }
       ],
-      desserts: [
-        {
-          title: 'Frozen Yogurt',
-          datePost: 'Ice cream',
-          statusPost: false
-        },
-        {
-          title: 'Ice cream sandwich',
-          datePost: 'Ice cream',
-          statusPost: true
-        },
-        {
-          title: 'Eclair',
-          datePost: 'Cookie',
-          statusPost: true
-        },
-        {
-          title: 'Cupcake',
-          datePost: 'Pastry',
-          statusPost: true
-        },
-        {
-          title: 'Gingerbread',
-          datePost: 'Cookie',
-          statusPost: true
-        },
-        {
-          title: 'Jelly bean',
-          datePost: 'Candy',
-          statusPost: false
-        },
-        {
-          title: 'Lollipop',
-          datePost: 'Candy',
-          statusPost: false
-        },
-        {
-          title: 'Honeycomb',
-          datePost: 'Toffee',
-          statusPost: true
-        },
-        {
-          title: 'Donut',
-          datePost: 'Pastry',
-          statusPost: true
-        },
-        {
-          title: 'KitKat',
-          datePost: 'Candy',
-          statusPost: true
-        }
-      ],
-      indexCurr: null
+      dialogRemove: false
     }
   },
+  mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/redcross/login' })
+    }
+    this.notice['alert'] = false
+    this.fetchPost()
+  },
+  computed: {
+    ...mapGetters('auth', ['isLoggedIn']),
+    ...mapState('posts', ['posts', 'notice', 'currPost'])
+  },
   methods: {
-    getColor(status) {
-      if (!status) return 'orange'
-      else if (status) return 'green'
-      else return 'gray'
-    },
+    ...mapActions('posts', ['fetchPost', 'deletePost']),
+    ...mapMutations('posts', ['setCurrPost']),
     getStatus(status) {
       if (!status) return 'ປິດໂພສ'
       else if (status) return 'ເປີດໂພສ'
     },
     editPost(item) {
-      let index = this.desserts.indexOf(item)
-      if (index != this.indexCurr) {
-        this.indexCurr = this.desserts.indexOf(item)
+      let id = item._id
+      this.setCurrPost(item)
+      if (item) {
         return this.$router.push({
-          path: `/posts/edit/${this.desserts.indexOf(item)}`
+          path: `/posts/edit/${id}`
         })
       }
+    },
+    viewPost(item) {
+      let id = item._id
+      this.setCurrPost(item)
+      if (item) {
+        return this.$router.push({
+          path: `/posts/view/${id}`
+        })
+      }
+    },
+    removePost(item) {
+      this.dialogRemove = true
+      this.setCurrPost(item)
+    },
+    comfirmRemovePost() {
+      this.dialogRemove = false
+      const storageRef = firebase.storage().refFromURL(this.currPost.image)
+
+      // Delete the file
+      storageRef
+        .delete()
+        .then(() => {
+          // File deleted successfully
+          this.deletePost(this.currPost)
+        })
+        .catch((error) => {
+          // Uh-oh, an error occurred!
+          console.log(error)
+        })
     }
   }
 }

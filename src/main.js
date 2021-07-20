@@ -4,22 +4,54 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 
+import VueOtp2 from 'vue-otp-2'
+Vue.use(VueOtp2)
+
 import '@/assets/sass/index.sass'
-import 'font-awesome/css/font-awesome.min.css'
+import '@fortawesome/fontawesome-free/css/all.css'
+// import 'font-awesome/css/font-awesome.min.css' // Old fontawesome 4.7
 
-//Import Froala Editor
-import 'froala-editor/js/plugins.pkgd.min.js'
-//Import third party plugins
-import 'froala-editor/js/third_party/embedly.min'
-import 'froala-editor/js/third_party/font_awesome.min'
-import 'froala-editor/js/third_party/spell_checker.min'
-import 'froala-editor/js/third_party/image_tui.min'
-// Import Froala Editor css files.
-import 'froala-editor/css/froala_editor.pkgd.min.css'
+import 'leaflet/dist/leaflet.css'
+import VueGeolocation from 'vue-browser-geolocation'
 
-// Import and use Vue Froala lib.
-import VueFroala from 'vue-froala-wysiwyg'
-Vue.use(VueFroala)
+import { Icon } from 'leaflet'
+delete Icon.Default.prototype._getIconUrl
+
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
+
+// Import and use Vue Ckeditor.
+import CKEditor from '@ckeditor/ckeditor5-vue2'
+
+// Use build files
+import VueRx from 'vue-rx'
+import VuejsClipper from 'vuejs-clipper/dist/vuejs-clipper.umd'
+import 'vuejs-clipper/dist/vuejs-clipper.css'
+
+Vue.use(VueRx)
+Vue.use(VuejsClipper, {
+  components: {
+    clipperBasic: true,
+    clipperFixed: true,
+    clipperPreview: true,
+    clipperUpload: true
+  }
+})
+
+import GAuth from 'vue-google-oauth2'
+const gauthOption = {
+  clientId:
+    '845169977174-3a8unht42bh4a16siifqaae3d637unau.apps.googleusercontent.com',
+  scope: 'profile email',
+  prompt: 'select_account'
+}
+Vue.use(GAuth, gauthOption)
+
+Vue.use(CKEditor)
+Vue.use(VueGeolocation)
 
 Vue.config.productionTip = false
 

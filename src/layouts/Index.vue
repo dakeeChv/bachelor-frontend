@@ -1,9 +1,9 @@
 <template>
-  <div id="main-app">
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list dense>
+  <div id="main-app" v-if="isLoggedIn">
+    <v-navigation-drawer v-model="drawer" app clipped>
+      <v-list nav dense>
         <v-list-item-group color="redcross accent-4">
-          <v-subheader>Overview</v-subheader>
+          <v-subheader>ຈັດການ</v-subheader>
           <v-list-item
             v-for="(item, i) in Overview"
             :key="i"
@@ -11,13 +11,15 @@
             link
           >
             <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+              <v-icon dense v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title
+                class="font-weight-medium"
+                v-text="item.text"
+              ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-subheader>ຈັດການ</v-subheader>
           <v-list-item
             v-for="(item, i) in Management"
             :key="i.title"
@@ -25,20 +27,86 @@
             link
           >
             <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
+              <v-icon dense v-text="item.icon"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title
+                class="font-weight-medium"
+                v-text="item.text"
+              ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app fixed color="red darken-2" dark>
+    <v-app-bar app fixed clipped-left color="red darken-2" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Blood Donation</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <div class="hidden-xs-only">
+        <v-menu bottom min-width="100px" offset-y>
+          <template v-slot:activator="{ on }">
+            <div v-on="on">
+              <v-list-item class="grow">
+                <v-list-item-avatar color="grey darken-3">
+                  <v-img
+                    class="elevation-6"
+                    alt=""
+                    :src="account.image"
+                  ></v-img>
+                </v-list-item-avatar>
+              </v-list-item>
+            </div>
+          </template>
+          <v-card tile max-width="240">
+            <v-list-item-content>
+              <div class="text-center">
+                <v-avatar color="grey darken-3">
+                  <v-img
+                    class="elevation-6"
+                    alt=""
+                    :src="account.image"
+                  ></v-img>
+                </v-avatar>
+                <br />
+                <!-- <h3>{{ account.firstName }}</h3>
+                <p class="caption mt-1">
+                  {{ account.lastName }}
+                </p> -->
+                <v-btn
+                  small
+                  rounded
+                  class="text-subtitle-2 font-weight-bold white--text mt-2"
+                  color="red darken-1"
+                  @click="logout"
+                >
+                  <v-icon left>mdi-logout</v-icon>
+                  Logout
+                </v-btn>
+                <v-divider class="my-3"></v-divider>
+              </div>
+              <div class="px-12">
+                <h3>{{ account.firstName }}</h3>
+                <p class="caption mt-1">
+                  {{ account.lastName }}
+                </p>
+                <!-- <v-btn
+                  class="d-flex justify-start"
+                  active-class="lighter-1 white--text"
+                  depressed
+                  rounded
+                  text
+                >
+                  <v-icon left>mdi-badge-account-horizontal</v-icon>
+                  ອັບເດດຂໍ້ມູນບັນຊີ
+                </v-btn> -->
+              </div>
+            </v-list-item-content>
+          </v-card>
+        </v-menu>
+      </div>
     </v-app-bar>
-    <v-main>
+    <v-main class="mb-6">
       <v-container>
         <router-view></router-view>
       </v-container>
@@ -79,6 +147,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   data: () => ({
     icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
@@ -86,21 +155,34 @@ export default {
     Overview: [
       {
         text: 'Dashbaord',
-        icon: 'mdi-view-dashboard-outline',
+        icon: 'fa-chart-line',
         path: '/dashboard'
       }
     ],
     Management: [
-      { text: 'Posts', icon: 'mdi-post-outline', path: '/posts' },
-      { text: 'Activity', icon: 'mdi-calendar-edit', path: '/activity' },
+      { text: 'ຂ່າວສານ', icon: 'far fa-newspaper', path: '/posts' },
+      { text: 'ກິດຈະກຳ', icon: 'fa-calendar-day', path: '/activity' },
       {
-        text: 'Record of Donation',
-        icon: 'mdi-file-document-multiple-outline',
-        path: '/record'
+        text: 'ລາຍງານການຮ້ອງຂໍ',
+        icon: 'fa-file-medical-alt',
+        path: '/allrequest'
       },
-      { text: 'Guide', icon: 'mdi-book-open', path: '/guide' }
+      { text: 'ຄູ່ມື', icon: 'fa-book', path: '/guide' }
     ]
-  })
+  }),
+  mounted() {
+    if (!this.isLoggedIn) {
+      return this.$router.push({ path: '/redcross/login' })
+    }
+    // console.log(this.account._id)
+  },
+  computed: {
+    ...mapState('auth', ['account']),
+    ...mapGetters('auth', ['isLoggedIn'])
+  },
+  methods: {
+    ...mapActions('auth', ['logout'])
+  }
 }
 </script>
 <style scoped>
