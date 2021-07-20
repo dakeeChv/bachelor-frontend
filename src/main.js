@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 
+import VueOtp2 from 'vue-otp-2'
+Vue.use(VueOtp2)
+
 import '@/assets/sass/index.sass'
 import '@fortawesome/fontawesome-free/css/all.css'
 // import 'font-awesome/css/font-awesome.min.css' // Old fontawesome 4.7
@@ -37,6 +40,16 @@ Vue.use(VuejsClipper, {
     clipperUpload: true
   }
 })
+
+import GAuth from 'vue-google-oauth2'
+const gauthOption = {
+  clientId:
+    '845169977174-3a8unht42bh4a16siifqaae3d637unau.apps.googleusercontent.com',
+  scope: 'profile email',
+  prompt: 'select_account'
+}
+Vue.use(GAuth, gauthOption)
+
 Vue.use(CKEditor)
 Vue.use(VueGeolocation)
 

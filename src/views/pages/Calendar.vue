@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card flat color="#f7f7f7">
-      <div class="text-h4 font-weight-bold text-center pa-4">
+      <div class="text-h5 font-weight-bold text-center pa-4">
         ປະຕິທິນການຮັບບໍລິຈາກເລືອດ
       </div>
     </v-card>
@@ -18,7 +18,7 @@
       border="top"
       class="mt-6 text-h6 font-weight-bold text-center mx-auto pa-4"
       color="redcross"
-      width="600px"
+      max-width="600px"
       dark
     >
       ກິດຈະກຳ {{ pickDate || today }}
@@ -33,7 +33,7 @@
     </div>
     <v-row v-else align="center" justify="space-around">
       <v-col v-for="date in calendar" :key="date._id" cols="12" md="4">
-        <v-card max-height="300px" @click="callViewActivity(date)">
+        <v-card max-height="200px" @click="callViewActivity(date)">
           <v-card-title class="text-h6 d-flex justify-space-around">
             <div>
               <v-icon left>far fa-clock</v-icon>
@@ -45,7 +45,7 @@
           </v-card-title>
           <v-card-text
             class="white text--primary text-center"
-            style="height: 200px"
+            style="max-height: 150px; height: 150px"
           >
             <div class="text-h6 font-weight-black">{{ date.title }}</div>
             <div class="text-h6">

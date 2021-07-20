@@ -5,14 +5,19 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/redcross/login',
-    name: 'Login',
-    component: () => import('@/views/auth/Login.vue')
+    path: '/signup',
+    name: 'SignUp',
+    component: () => import('@/views/auth/SignUp.vue')
   },
   {
-    path: '/login',
+    path: '/signin',
+    name: 'SignIn',
+    component: () => import('@/views/auth/SignIn.vue')
+  },
+  {
+    path: '/redcross/login',
     name: 'Auth',
-    component: () => import('@/views/auth/Register.vue')
+    component: () => import('@/views/auth/AuthAdmin.vue')
   },
   {
     path: '/dashboard',
@@ -88,6 +93,11 @@ const routes = [
         path: '/guide/view/:id',
         name: 'View-Guide',
         component: () => import('@/components/guide/ViewGuide.vue')
+      },
+      {
+        path: '/allrequest',
+        name: 'All-Request',
+        component: () => import('@/components/request/AllRequest')
       }
     ]
   },
@@ -125,6 +135,51 @@ const routes = [
         path: '/activity/:id',
         name: 'View-Activi',
         component: () => import('@/components/activity/ViewActivity')
+      },
+      {
+        path: '/donor',
+        name: 'Recoord-Donor',
+        component: () => import('@/views/pages/Donor')
+      },
+      {
+        path: '/history',
+        name: 'History-Donation',
+        component: () => import('@/views/pages/History')
+      },
+      {
+        path: '/donor/history/detail',
+        name: 'History-Detail',
+        component: () => import('@/components/activity/ViewActivity')
+      },
+      {
+        path: '/aboutus',
+        name: 'About-Us',
+        component: () => import('@/views/pages/AboutUs')
+      },
+      {
+        path: '/myrequest',
+        name: 'MyRequest',
+        component: () => import('@/views/pages/MyRequest')
+      },
+      {
+        path: '/myrequest/add',
+        name: 'Add-MyRequest',
+        component: () => import('@/components/pages/AddRequest')
+      },
+      {
+        path: '/view/request/:id',
+        name: 'View-Request',
+        component: () => import('@/components/pages/ViewRequest')
+      },
+      {
+        path: '/edit/request/:id',
+        name: 'Edit-Request',
+        component: () => import('@/components/pages/EditRequest')
+      },
+      {
+        path: '/request/list',
+        name: 'Public-Request',
+        component: () => import('@/views/pages/PublicRequest')
       }
     ]
   },
