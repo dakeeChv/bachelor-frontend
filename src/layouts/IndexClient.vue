@@ -203,17 +203,52 @@
             </v-icon>
           </v-btn>
         </v-card-text>
-
-        <v-card-text class="pt-0">
+        <v-divider></v-divider>
+        <!-- <v-card-text class="pt-0">
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deleniti
           molestias omnis ab culpa maiores amet beatae eum incidunt nulla rem
+        </v-card-text> -->
+        <v-card-text class="pt-0 mt-4">
+          <v-row class="mx-auto">
+            <v-col cols="12" md="4">
+              <div class="d-flex flex-column text-left px-12">
+                <div class="title">
+                  <v-icon left color="#C62828">fa-map-marker-alt</v-icon>
+                  ສະຖານທີ່
+                </div>
+                <div>ມະຫາວິທະຍາໄລແຫ່ງຊາດ ຄະນະວິສະວະກຳສາດ</div>
+                <div>ວິທະຍາເຂດ ໂສກປ່າຫຼວງ, ສາຂາວິຊາ ຄອມພິວເຕີ້</div>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4">
+              <div class="d-flex flex-column text-left px-12">
+                <div class="title">
+                  <v-icon left color="#C62828">fa-headset</v-icon> ຕິດຕໍ່ພົວພັນ
+                </div>
+                <div class="ml-8">
+                  <div>20 56 716 234</div>
+                  <div>20 52 997 955</div>
+                  <div>20 56 222 326</div>
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4">
+              <div class="d-flex flex-column text-left px-12">
+                <div class="title">ລິຂະສິດ</div>
+                <div class="body-1">
+                  Copyright © {{ new Date().getFullYear() }} BLOODDONATIONLAO.
+                  All Rights Reserved.
+                </div>
+              </div>
+            </v-col>
+          </v-row>
         </v-card-text>
 
         <v-divider></v-divider>
 
-        <v-card-text>
+        <!-- <v-card-text>
           {{ new Date().getFullYear() }} — <strong>blooddonationlao</strong>
-        </v-card-text>
+        </v-card-text> -->
       </v-card>
     </v-footer>
   </div>

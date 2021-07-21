@@ -111,10 +111,11 @@
         <router-view></router-view>
       </v-container>
     </v-main>
-    <v-footer app absolute inset dark padless>
-      <v-card flat tile class="red accent-3 white--text text-center">
+    <v-footer app absolute inset padless>
+      <v-card flat tile width="100%" class="text-center">
         <v-card-text>
           <v-btn
+            color="redcross"
             v-for="icon in icons"
             :key="icon"
             class="mx-4 white--text"
@@ -126,21 +127,50 @@
           </v-btn>
         </v-card-text>
 
-        <v-card-text class="white--text pt-0">
-          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet.
-          Mauris cursus commodo interdum. Praesent ut risus eget metus luctus
-          accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim
-          a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula
-          lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus
-          iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum
-          tempor vel ut orci. Orci varius natoque penatibus et magnis dis
-          parturient montes, nascetur ridiculus mus.
-        </v-card-text>
+        <!-- <v-card-text class="pt-0">
+          <v-row class="mx-auto">
+            <v-col cols="12" md="4">
+              <div class="d-flex flex-column text-left px-12">
+                <div class="title">
+                  <v-icon left color="#C62828">fa-map-marker-alt</v-icon>
+                  ສະຖານທີ່
+                </div>
+                <div>ສູນເລືອດແຫ່ງຊາດ</div>
+                <div>ບ້ານຊຽງຍືນ ມ.ຈັນທະບູລີ ນະຄອນຫຼວງວຽງຈັນ</div>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4">
+              <div class="d-flex flex-column text-left px-12">
+                <div class="title">
+                  <v-icon left color="#C62828">fa-headset</v-icon> ຕິດຕໍ່ພົວພັນ
+                </div>
+                <div class="ml-8">
+                  <div>030 548 7539</div>
+                  <div>021 214 763</div>
+                  <div>020 5741 6381</div>
+                  <div>020 5741 6382</div>
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4">
+              <div class="d-flex flex-column text-left px-12">
+                <div class="title">ລິຂະສິດ</div>
+                <div class="body-1">
+                  Copyright © {{ new Date().getFullYear() }} BLOODDONATIONLAO.
+                  All Rights Reserved.
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-text> -->
 
         <v-divider></v-divider>
 
-        <v-card-text class="white--text">
-          {{ new Date().getFullYear() }} — <strong>blooddonationlao</strong>
+        <v-card-text class="redcross--text">
+          <div class="body-1 redcross--text">
+            Copyright © {{ new Date().getFullYear() }} BLOODDONATIONLAO. All
+            Rights Reserved.
+          </div>
         </v-card-text>
       </v-card>
     </v-footer>

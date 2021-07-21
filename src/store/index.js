@@ -16,7 +16,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    baseUrl: 'https://lbnbackend1.herokuapp.com/'
+    // baseUrl: 'https://lbnbackend1.herokuapp.com/'
+    baseUrl: 'http://localhost:3000/'
   },
   mutations: {},
   actions: {},
