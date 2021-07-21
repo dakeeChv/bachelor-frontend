@@ -7,7 +7,7 @@
       {{ currPost.penname }}
     </v-card-subtitle> -->
     <v-card-subtitle>
-      {{ formatTime(currPost.createdAt) }}
+      {{ currPost.datePost }}
     </v-card-subtitle>
     <v-row style="background: #f7f7f7" justify="center">
       <v-img
@@ -23,7 +23,7 @@
   </v-card>
 </template>
 <script>
-import moment from 'moment'
+// import moment from 'moment'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'viewPost',
@@ -37,11 +37,11 @@ export default {
     ...mapState('posts', ['currPost'])
   },
   methods: {
-    ...mapActions('posts', ['fetchCurrPost']),
-    formatTime(createdAt) {
-      const thisMoment = moment.utc(createdAt).format('MMMM Do YYYY')
-      return thisMoment
-    }
+    ...mapActions('posts', ['fetchCurrPost'])
+    // formatTime(createdAt) {
+    //   const thisMoment = moment.utc(createdAt).format('MMMM Do YYYY')
+    //   return thisMoment
+    // }
   }
 }
 </script>

@@ -178,6 +178,7 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['isLoggedIn']),
+    ...mapState('auth', ['account']),
     ...mapState('posts', ['newPost', 'notice'])
   },
   methods: {
@@ -240,12 +241,12 @@ export default {
               //   // For instance, get the download URL: https://firebasestorage.googleapis.com/...
               uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                 this.newPost['image'] = downloadURL
-                // this.newPost['datePost'] = moment().format(
-                //   'MMMM Do YYYY, h:mm:ss a'
-                // )
+                this.newPost['datePost'] = new Date().toLocaleString('en-US', {
+                  timeZone: 'Asia/Bangkok'
+                })
                 this.newPost['statusPost'] = this.statusPost
                 // this.newPost['statusPost'] === true ? true : false
-                this.newPost['penname'] = 'Admin-VTE'
+                this.newPost['penName'] = this.account['_id']
                 this.createPost(this.newPost)
                 this.notice['pending'] = false
               })
