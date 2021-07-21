@@ -20,7 +20,7 @@
         <v-col v-for="post in posts" :key="post.id" cols="12" md="4" sm="6">
           <v-hover>
             <template v-slot:default="{ hover }">
-              <v-card flat class="mx-auto" max-width="344" height="320px">
+              <v-card flat class="mx-auto" max-width="354" height="370px">
                 <v-img :src="post.image"></v-img>
                 <v-card-text>
                   <v-subheader>
@@ -57,7 +57,7 @@ export default {
     ...mapState('posts', ['posts']),
     slides: function () {
       let sides = []
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 4; i++) {
         sides.push(this.posts[i])
       }
       return sides

@@ -1,34 +1,70 @@
 <script>
 import { Bar } from 'vue-chartjs'
-
 export default {
   extends: Bar,
   mounted() {
     this.renderChart(
       {
         labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December'
+          'ມັງກອນ',
+          'ກຸມພາ',
+          'ມີນາ',
+          'ເມສາ',
+          'ພືດສະພາ',
+          'ມິຖຸນາ',
+          'ກໍລະກົດ',
+          'ສິງຫາ',
+          'ກັນຍາ',
+          'ຕຸລາ',
+          'ພະຈິກ',
+          'ທັນວາ'
         ],
         datasets: [
           {
-            label: 'Data One',
+            label: 'ຜູ້ບໍລິຈາກໃນກິດຈະກຳບໍລິຈາກ',
             backgroundColor: '#de1b23',
-            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+            data: [400, 200, 120, 390, 100, 400, 390, 0, 0, 0, 0, 0]
+          },
+          {
+            label: 'ສ່ວນຂອງຜູ້ບໍລິຈາກໃໝ່',
+            backgroundColor: '#FF9100',
+            data: [40, 100, 70, 190, 10, 100, 302, 0, 0, 0, 0, 0]
           }
         ]
       },
-      { responsive: true, maintainAspectRatio: false }
+      {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [
+            {
+              display: true,
+              ticks: {
+                suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+                // OR //
+                beginAtZero: true, // minimum value will be 0.
+                suggestedMax: 10
+              },
+              gridLines: {
+                display: false
+              },
+              pointLabels: {
+                fontFamily: 'NotoSansLao'
+              }
+            }
+          ],
+          xAxes: [
+            {
+              gridLines: {
+                display: false
+              },
+              ticks: {
+                fontFamily: 'NotoSansLao'
+              }
+            }
+          ]
+        }
+      }
     )
   }
 }

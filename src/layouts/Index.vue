@@ -151,7 +151,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   data: () => ({
     icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
-    drawer: false,
+    drawer: true,
     Overview: [
       {
         text: 'Dashbaord',

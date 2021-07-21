@@ -16,7 +16,7 @@
       </v-alert>
     </div>
     <v-toolbar flat class="mx-6 mb-6">
-      <v-toolbar-title class="text-h5"> ເພີ່ມຄູ່ມື</v-toolbar-title>
+      <v-toolbar-title class="text-h5"> ແກ້ໄຂຄູ່ມື</v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
     <v-form>
@@ -85,7 +85,7 @@
           color="green darken-3"
           class="my-6 mr-4"
           @click="callEditGuide"
-          >ບັນທຶກ</v-btn
+          >ບັນທຶກການແກ້ໄຂ</v-btn
         >
         <v-btn dark depressed color="redcross" class="my-6" @click="goBack"
           >ຍົກເລີກ</v-btn
