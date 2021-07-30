@@ -98,7 +98,7 @@
             <v-img
               class="mx-auto"
               contain
-              src="https://firebasestorage.googleapis.com/v0/b/nodewithfirebase-6e669.appspot.com/o/public%2F36235389_1765790556841848_1634414186329014272_n.jpg?alt=media&token=268291c6-0f7f-4b70-9c99-8ac104a067d6"
+              src="https://firebasestorage.googleapis.com/v0/b/nodewithfirebase-6e669.appspot.com/o/public%2Fblood-drop.png?alt=media&token=419ff2ab-f911-483b-97ac-59c543dbf081"
               width="250px"
             ></v-img>
           </v-col>
