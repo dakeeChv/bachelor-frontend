@@ -17,7 +17,13 @@
         </div>
       </v-card>
       <v-row class="mt-6">
-        <v-col v-for="post in posts" :key="post.id" cols="12" md="4" sm="6">
+        <v-col
+          v-for="post in postClient"
+          :key="post.id"
+          cols="12"
+          md="4"
+          sm="6"
+        >
           <v-hover>
             <template v-slot:default="{ hover }">
               <v-card flat class="mx-auto" max-width="354" height="370px">
@@ -51,20 +57,22 @@ export default {
     return {}
   },
   mounted() {
-    this.fetchPost()
+    // this.fetchPost()
+    this.fetchPostClient()
   },
   computed: {
-    ...mapState('posts', ['posts']),
+    ...mapState('posts', ['postClient']),
     slides: function () {
       let sides = []
       for (let i = 0; i < 4; i++) {
-        sides.push(this.posts[i])
+        sides.push(this.postClient[i])
       }
       return sides
     }
   },
   methods: {
-    ...mapActions('posts', ['fetchPost']),
+    // ...mapActions('posts', ['fetchPost']),
+    ...mapActions('posts', ['fetchPostClient']),
     ...mapMutations('posts', ['setCurrPost']),
     formatTime(createdAt) {
       const thisMoment = moment.utc(createdAt).format('MMMM Do YYYY')

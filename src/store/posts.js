@@ -19,7 +19,8 @@ export default {
       alert: false,
       pending: false,
       message: ''
-    }
+    },
+    postClient: []
   },
   actions: {
     async fetchPost({ commit }) {
@@ -27,6 +28,13 @@ export default {
         .get(`post/read/admin`)
         .then(({ data }) => {
           commit('setPost', data.data)
+        })
+    },
+    async fetchPostClient({ commit }) {
+      return await api()
+        .get(`post/read`)
+        .then(({ data }) => {
+          commit('setPostClient', data.data)
         })
     },
     fetchCurrPost({ commit }, idCurr) {
@@ -100,6 +108,9 @@ export default {
     },
     updatePost(state, currPost) {
       state.posts.splice(state.posts.indexOf(currPost), 1, currPost)
+    },
+    setPostClient(state, data) {
+      state.postClient = data
     }
   }
 }
