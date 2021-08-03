@@ -189,18 +189,20 @@
       </v-container>
     </v-main>
     <v-footer app absolute inset padless>
-      <v-card width="100%" tile class="text-center">
+      <v-card width="100%" tile class="text-center mx-auto">
         <v-card-text>
           <v-btn
             color="redcross"
             v-for="icon in icons"
-            :key="icon"
+            :key="icon.icon"
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">
-              {{ icon }}
-            </v-icon>
+            <a style="color: #de1b23" :href="icon.path" target="_blank"
+              ><v-icon size="24px">
+                {{ icon.icon }}
+              </v-icon></a
+            >
           </v-btn>
         </v-card-text>
         <v-divider></v-divider>
@@ -211,7 +213,7 @@
         <v-card-text class="pt-0 mt-4">
           <v-row class="mx-auto">
             <v-col cols="12" md="4">
-              <div class="d-flex flex-column text-left px-12">
+              <div class="d-flex flex-column text-sm-text text-md-left px-12">
                 <div class="title">
                   <v-icon left color="#C62828">fa-map-marker-alt</v-icon>
                   ສະຖານທີ່
@@ -221,7 +223,7 @@
               </div>
             </v-col>
             <v-col cols="12" md="4">
-              <div class="d-flex flex-column text-left px-12">
+              <div class="d-flex flex-column text-sm-text text-md-left px-12">
                 <div class="title">
                   <v-icon left color="#C62828">fa-headset</v-icon> ຕິດຕໍ່ພົວພັນ
                 </div>
@@ -233,7 +235,7 @@
               </div>
             </v-col>
             <v-col cols="12" md="4">
-              <div class="d-flex flex-column text-left px-12">
+              <div class="d-flex flex-column text-sm-text text-md-left px-12">
                 <div class="title">ລິຂະສິດ</div>
                 <div class="body-1">
                   Copyright © {{ new Date().getFullYear() }} BLOODDONATIONLAO.
@@ -257,7 +259,15 @@
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   data: () => ({
-    icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
+    icons: [
+      {
+        icon: 'mdi-facebook',
+        path:
+          'https://www.facebook.com/pages/category/Local-Business/Lao-Red-Cross-National-Blood-Transfusion-Centre-475164072571176/'
+      },
+      { icon: 'mdi-twitter', path: '' },
+      { icon: 'mdi-instagram', path: 'https://www.instagram.com/laoredcross/' }
+    ],
     drawer: false
     // Overview: [
     //   {

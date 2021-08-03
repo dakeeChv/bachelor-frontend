@@ -61,13 +61,27 @@
           <v-card tile max-width="240">
             <v-list-item-content>
               <div class="text-center">
-                <v-avatar color="grey darken-3">
-                  <v-img
-                    class="elevation-6"
-                    alt=""
-                    :src="account.image"
-                  ></v-img>
-                </v-avatar>
+                <div class="d-inline-flex">
+                  <!-- <div> -->
+                  <v-avatar size="100" color="grey darken-3">
+                    <v-img
+                      class="elevation-6"
+                      alt=""
+                      :src="account.image"
+                    ></v-img>
+                  </v-avatar>
+                  <!-- </div> -->
+                  <div class="d-flex align-end ml-n5">
+                    <v-btn
+                      to="/redcross/profile"
+                      dark
+                      icon
+                      x-small
+                      class="redcross"
+                      ><v-icon x-small>fa-pencil-alt</v-icon></v-btn
+                    >
+                  </div>
+                </div>
                 <br />
                 <!-- <h3>{{ account.firstName }}</h3>
                 <p class="caption mt-1">
@@ -117,13 +131,15 @@
           <v-btn
             color="redcross"
             v-for="icon in icons"
-            :key="icon"
+            :key="icon.icon"
             class="mx-4 white--text"
             icon
           >
-            <v-icon size="24px">
-              {{ icon }}
-            </v-icon>
+            <a style="color: #de1b23" :href="icon.path" target="_blank"
+              ><v-icon size="24px">
+                {{ icon.icon }}
+              </v-icon></a
+            >
           </v-btn>
         </v-card-text>
 
@@ -180,7 +196,15 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   data: () => ({
-    icons: ['mdi-facebook', 'mdi-twitter', 'mdi-linkedin', 'mdi-instagram'],
+    icons: [
+      {
+        icon: 'mdi-facebook',
+        path:
+          'https://www.facebook.com/pages/category/Local-Business/Lao-Red-Cross-National-Blood-Transfusion-Centre-475164072571176/'
+      },
+      { icon: 'mdi-twitter', path: '' },
+      { icon: 'mdi-instagram', path: 'https://www.instagram.com/laoredcross/' }
+    ],
     drawer: true,
     Overview: [
       {
