@@ -22,15 +22,19 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
   data() {
     return {}
+  },
+  mounted() {
+    this.fetchGuide()
   },
   computed: {
     ...mapState('guide', ['guides'])
   },
   methods: {
+    ...mapActions('guide', ['fetchGuide']),
     ...mapMutations('guide', ['setCurrGuide']),
     viewGuide(item) {
       let id = item._id

@@ -11,6 +11,7 @@ import authSocial from './authSocial'
 import bloodGroup from './bloodGroup'
 import donation from './donation'
 import request from './request'
+import dashboard from './dashboard'
 
 Vue.use(Vuex)
 
@@ -30,7 +31,8 @@ export default new Vuex.Store({
     authSocial,
     bloodGroup,
     donation,
-    request
+    request,
+    dashboard
   },
   plugins: [createPersistedState()]
 })

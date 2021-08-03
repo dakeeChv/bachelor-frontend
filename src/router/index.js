@@ -98,6 +98,16 @@ const routes = [
         path: '/allrequest',
         name: 'All-Request',
         component: () => import('@/components/request/AllRequest')
+      },
+      {
+        path: '/redcross/profile',
+        name: 'Profile-Admin',
+        component: () => import('@/views/auth/ProfileAdmin')
+      },
+      {
+        path: '/donor/list/:id',
+        name: 'List-Donor',
+        component: () => import('@/components/dashboard/ListDonor')
       }
     ]
   },

@@ -230,23 +230,28 @@ export default {
       // console.log(!this.historyOfEmer.length)
       // console.log(!this.histories.length)
       let d
+      let setDayDonor
       if (!this.histories && !this.historyOfEmer) {
         return
       }
       if (!this.histories.length) {
         d = new Date(this.historyOfEmer[0].dateDonor)
+        setDayDonor = new Date(this.historyOfEmer[0].dateDonor)
       } else if (!this.historyOfEmer.length) {
         d = new Date(this.histories[0].dateDonor)
+        setDayDonor = new Date(this.histories[0].dateDonor)
       } else if (
         new Date(this.historyOfEmer[0].dateDonor) >
         new Date(this.histories[0].dateDonor)
       ) {
         d = new Date(this.historyOfEmer[0].dateDonor)
+        setDayDonor = new Date(this.historyOfEmer[0].dateDonor)
       } else if (
         new Date(this.historyOfEmer[0].dateDonor) <
         new Date(this.histories[0].dateDonor)
       ) {
         d = new Date(this.histories[0].dateDonor)
+        setDayDonor = new Date(this.histories[0].dateDonor)
       }
       // console.log(d.toLocaleDateString())
       d.setMonth(d.getMonth() + 3)
@@ -257,14 +262,17 @@ export default {
       const oneDay = 24 * 60 * 60 * 1000 // hours*minutes*seconds*milliseconds
       const firstDate = new Date(toTime)
       const secondDate = new Date()
+      console.log(firstDate + ' and ' + secondDate)
 
       if (firstDate < secondDate) {
         this.diffDays = 0
         this.diffAsPercent = 100
         return
       }
+      // console.log('HHH' + setDayDonor)
       let set = Math.round(
-        Math.abs((firstDate - new Date(this.histories[0].dateDonor)) / oneDay)
+        // Math.abs((firstDate - new Date(this.histories[0].dateDonor)) / oneDay)
+        Math.abs((firstDate - setDayDonor) / oneDay)
       )
       // console.log(set)
 

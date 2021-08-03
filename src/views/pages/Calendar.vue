@@ -7,20 +7,57 @@
     </v-card>
 
     <v-row class="mt-6" align="center" justify="center">
-      <v-date-picker
-        v-model="pickDate"
-        color="redcross"
-        width="600px"
-        flat
-      ></v-date-picker>
+      <v-card class="ma-3" width="100%" flat>
+        <div
+          class="d-flex flex-xs-column flex-md-row flex-sm-column justify-space-around"
+        >
+          <div class="align-self-center mt-6">
+            <v-date-picker
+              v-model="pickDate"
+              color="redcross"
+              flat
+            ></v-date-picker>
+          </div>
+          <div class="ml-4 align-self-center justify-center">
+            <v-card-title class="text-h6 d-flex justify-space-around">
+              <div>
+                <v-icon left>far fa-clock</v-icon>
+                <span class="font-weight-bold">ເວລາ</span>
+                <span class="pl-7"
+                  >{{ bloodbank['bloodbank']['timeStart'] }} -
+                  {{ bloodbank['bloodbank']['timeEnd'] }}</span
+                >
+              </div>
+            </v-card-title>
+            <v-card-text
+              class="white text--primary text-center"
+              style="max-height: 150px; height: 150px"
+            >
+              <div class="text-h6 font-weight-black">
+                {{ bloodbank['bloodbank']['title'] }}
+              </div>
+              <div class="text-h6">
+                <v-icon color="red" left>fa-map-marker-alt</v-icon
+                >{{ bloodbank['bloodbank']['addressId']['addressName'] }}
+              </div>
+              <!-- <v-btn color="red lighten-2" class="mx-0" outlined> Button </v-btn> -->
+              <p>
+                ທ່ານສາມາດຮ່ວມບໍລິຈາກເລືອດ ໃນທຸກວັນຈັນ-ອາທິດ ທີ່ສູນເລືອດແຫ່ງຊາດ
+              </p>
+              <v-btn
+                color="red lighten-2"
+                class="mx-0"
+                outlined
+                @click="callViewActivity(bloodbank['bloodbank'])"
+              >
+                ລາຍລະອຽດ
+              </v-btn>
+            </v-card-text>
+          </div>
+        </div>
+      </v-card>
     </v-row>
-    <v-alert
-      border="top"
-      class="mt-6 text-h6 font-weight-bold text-center mx-auto pa-4"
-      color="redcross"
-      max-width="600px"
-      dark
-    >
+    <v-alert class="mt-6 text-h6 font-weight-bold text-center mx-auto pa-4">
       ກິດຈະກຳ {{ pickDate || today }}
     </v-alert>
     <div v-if="notice.pending" class="text-center">
@@ -73,19 +110,24 @@ export default {
       today: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
-      pickDate: null,
+      pickDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
       counter: 0
     }
   },
   computed: {
-    ...mapState('activity', ['calendar', 'notice'])
+    ...mapState('activity', ['calendar', 'notice']),
+    ...mapState('dashboard', ['bloodbank'])
   },
   mounted() {
     this.fetchCalendar(this.today)
+    this.fetchBloodBank()
   },
   methods: {
     ...mapActions('activity', ['fetchCalendar']),
     ...mapMutations('activity', ['setCurrActivity']),
+    ...mapActions('dashboard', ['fetchBloodBank']),
     callViewActivity(item) {
       let id = item._id
       this.setCurrActivity(item)
