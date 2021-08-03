@@ -27,21 +27,28 @@
       <div class="text-h5 font-weight-bold mt-4 pa-4">ແຜນທີ່</div>
       <l-map id="map" style="height: 400px" :zoom="zoom" :center="centerMap">
         <l-tile-layer :url="url"></l-tile-layer>
-        <l-marker :lat-lng="markerMap" :icon="icon"></l-marker>
+        <l-marker :lat-lng="markerMap" :icon="icon">
+          <l-tooltip :options="{ permanent: true, interactive: true }">
+            <div class="caption font-weight-bold">
+              {{ currActivity['addressId']['addressName'] }}
+            </div>
+          </l-tooltip>
+        </l-marker>
       </l-map>
     </v-card>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LTooltip } from 'vue2-leaflet'
 import { icon, latLng } from 'leaflet'
 
 export default {
   components: {
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
+    LTooltip
   },
   data() {
     return {
