@@ -225,11 +225,11 @@ export default {
       let alertEle = this.$refs['alert']
       var top = alertEle.offsetTop
       window.scrollTo(0, top)
-      // this.$refs.formActivity.resetValidation()
-      // this.$$refs.formActivity.reset()
-      this.timeStart = null
-      this.timeEnd = null
-      this.dateAt = null
+      this.$refs.formActivity.resetValidation()
+      this.$refs.formActivity.reset()
+      this.timeStart = ''
+      this.timeEnd = ''
+      this.dateAt = ''
       this.status = false
       this.contentRules = false
     }

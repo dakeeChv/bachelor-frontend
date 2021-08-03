@@ -21,7 +21,7 @@ export default {
           // console.log(verifyCode)
           commit('setNotice', data)
           if (!data.alert) {
-            return router.push({ path: '/home' })
+            return router.push({ path: '/history' })
           }
         })
     },
@@ -41,7 +41,7 @@ export default {
         .then(({ data }) => {
           commit('setNotice', data)
           if (!data.alert) {
-            return router.push({ path: '/home' })
+            return router.push({ path: '/history' })
           }
         })
     },

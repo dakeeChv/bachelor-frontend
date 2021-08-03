@@ -42,6 +42,7 @@ export default {
         .then(({ data }) => {
           commit('appendGuide', data.data)
           commit('setNewGuide', {})
+          state.newGuide['title'] = ' '
           commit('setNotice', data.notice)
         })
         .catch((err) => {

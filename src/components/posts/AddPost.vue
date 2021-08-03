@@ -30,7 +30,6 @@
             prepend-inner-icon="fa-newspaper"
             label="ຫົວຂໍ້ຂ່າວ"
             color="redcross"
-            prefix=" "
             :rules="titleRules"
             required
           ></v-text-field>
@@ -249,6 +248,11 @@ export default {
                 this.newPost['penName'] = this.account['_id']
                 this.createPost(this.newPost)
                 this.notice['pending'] = false
+                // this.newPost['title'] = ' '
+                this.$refs.form.reset()
+                // this.$refs.title.reset()
+                // this.$refs.title.resetValidation()
+                this.newPost['title'] = ' '
               })
             }
           )
@@ -256,7 +260,6 @@ export default {
       }
       this.orgImg = null
       this.cropImg = null
-
       // go to alert
       let alertEle = this.$refs['alert']
       var top = alertEle.offsetTop

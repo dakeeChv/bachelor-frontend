@@ -210,6 +210,7 @@ export default {
                 this.newGuide['cover'] = downloadURL
                 this.createGuide(this.newGuide)
                 this.newGuide['pending'] = false
+                this.$refs.form.reset()
               })
             }
           )

@@ -109,7 +109,13 @@
       </v-row>
       <v-row class="mb-10" align="center" justify="space-around">
         <v-col cols="12" md="4">
-          <v-card class="mx-auto pa-md-4 pa-sm-2" max-width="420" outlined>
+          <v-card
+            height="350px"
+            max-height="400px"
+            class="mx-auto pa-md-4 pa-sm-2"
+            max-width="420"
+            outlined
+          >
             <div class="text-overline mb-4">
               <v-icon color="red" left>fa-map-marker-alt</v-icon
               >{{ bloodbank['bloodbank']['addressId']['addressName'] }}
@@ -142,7 +148,7 @@
                 depressed
                 icon
                 dark
-                @click="reloadBloodBank"
+                @click="reloadBloodBank()"
                 ><v-icon small>fa-sync</v-icon></v-btn
               >
               <v-btn
@@ -160,6 +166,8 @@
           <v-card
             class="mx-auto pa-md-4 pa-sm-2"
             max-width="420"
+            height="350px"
+            max-height="400px"
             @click="toListDonor(info)"
             outlined
           >
@@ -255,7 +263,7 @@ export default {
     },
     async reloadBloodBank() {
       this.notice['pending'] = true
-      await this.fetchBloodBank
+      await this.fetchBloodBank()
     }
   },
   watch: {

@@ -24,7 +24,7 @@ export default {
   actions: {
     async fetchPost({ commit }) {
       return await api()
-        .get(`post/read`)
+        .get(`post/read/admin`)
         .then(({ data }) => {
           commit('setPost', data.data)
         })
@@ -42,6 +42,7 @@ export default {
         .then(({ data }) => {
           commit('appendPost', data.data)
           commit('setNewPost', {})
+          state.newPost['title'] = ' '
           commit('setNotice', data.notice)
         })
         .catch((err) => {

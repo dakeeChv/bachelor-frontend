@@ -30,6 +30,7 @@ export default {
         .then(({ data }) => {
           commit('appendActivity', data.data)
           commit('setNewActivity', {})
+          state.newActivity['title'] = ' '
           commit('setNotice', data.notice)
         })
     },
