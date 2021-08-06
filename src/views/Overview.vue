@@ -68,7 +68,7 @@
         }}</span>
       </v-card-text>
     </v-card>
-    <v-card class="mt-4 pa-md-10 pa-sm-4 mx-auto" max-width="1000">
+    <v-card class="mt-4 pa-md-6 pa-sm-4 mx-auto" max-width="1000">
       <v-row justify="center">
         <v-col align-self="center" cols="6">
           <div class="text-center text-md-h5 text-sm-h6">
@@ -107,7 +107,27 @@
           </v-dialog>
         </v-col>
       </v-row>
-      <v-row class="mb-10" align="center" justify="space-around">
+      <v-row justify="end">
+        <v-btn
+          class="mr-3"
+          small
+          color="redcross"
+          :disabled="!gallery"
+          outlined
+          @click="gallery = false"
+          >List Column</v-btn
+        >
+        <v-btn
+          class="mr-3"
+          small
+          color="redcross"
+          :disabled="gallery"
+          outlined
+          @click="gallery = true"
+          >Gallery</v-btn
+        >
+      </v-row>
+      <v-row v-if="gallery" class="mb-10" align="center" justify="space-around">
         <v-col cols="12" md="4">
           <v-card
             height="350px"
@@ -199,6 +219,43 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-row v-if="!gallery">
+        <div class="mx-auto mt-6" style="max-width: 1000px">
+          <v-data-table
+            :headers="headers"
+            :items="reportTable"
+            :items-per-page="5"
+            item-key="title"
+            class="elevation-1"
+            :footer-props="{
+              showFirstLastPage: true,
+              firstIcon: 'mdi-arrow-collapse-left',
+              lastIcon: 'mdi-arrow-collapse-right',
+              prevIcon: 'mdi-minus',
+              nextIcon: 'mdi-plus'
+            }"
+          >
+            <template v-slot:[`item.address`]="{ item }">
+              {{ item['address']['addressName'] }}
+            </template>
+            <template v-slot:[`item.time`]="{ item }">
+              {{ item.timeStart }} - {{ item.timeEnd }}
+            </template>
+            <template v-slot:[`item.detail`]="{ item }">
+              <v-btn
+                color="redcross"
+                depressed
+                dark
+                small
+                rounded
+                @click="toListDonor(item)"
+                icon
+                ><v-icon small>fa-eye</v-icon></v-btn
+              >
+            </template>
+          </v-data-table>
+        </div>
+      </v-row>
     </v-card>
     <v-overlay :value="notice.pending">
       <v-progress-circular
@@ -227,13 +284,43 @@ export default {
       date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
         .toISOString()
         .substr(0, 10),
-      modal: false
+      modal: false,
+      headers: [
+        {
+          text: 'ກິດຈະກຳ',
+          align: 'start',
+          value: 'title'
+        },
+        {
+          text: 'ລະຫັດ',
+          value: 'verifyCode'
+        },
+        {
+          text: 'ສະຖານທີ່',
+          value: 'address'
+        },
+        {
+          text: 'ເວລາ',
+          value: 'time'
+        },
+        {
+          text: 'ຈຳນວນຜູ້ບໍລິຈາກ',
+          value: 'count'
+        },
+        {
+          text: 'ລາຍລະອຽດ',
+          value: 'detail'
+        }
+      ],
+      reportTable: [],
+      gallery: false
     }
   },
   mounted() {
     this.fetchChart(this.pickYear)
     this.fetchInfoActivity(this.date)
     this.fetchBloodBank()
+    this.getAllTable(this.bloodbank)
   },
   computed: {
     ...mapState('dashboard', [
@@ -264,6 +351,24 @@ export default {
     async reloadBloodBank() {
       this.notice['pending'] = true
       await this.fetchBloodBank()
+    },
+    getAllTable(data) {
+      // console.log(data['bloodbank']['_id'])
+      let info = {
+        _id: data['bloodbank']['_id'],
+        title: data['bloodbank']['title'],
+        verifyCode: data['bloodbank']['verifyCode'],
+        timeStart: data['bloodbank']['timeStart'],
+        timeEnd: data['bloodbank']['timeEnd'],
+        address: data['bloodbank']['addressId'],
+        count: data.count
+      }
+      let All = []
+      for (let inc in this.infoActivity) {
+        All.push(this.infoActivity[inc])
+      }
+      All.unshift(info)
+      this.reportTable = All
     }
   },
   watch: {
@@ -271,7 +376,8 @@ export default {
       // console.log(val)
       if (val) {
         this.notice['pending'] = true
-        return await this.fetchInfoActivity(val)
+        await this.fetchInfoActivity(val)
+        this.getAllTable(this.bloodbank)
       }
     }
   }

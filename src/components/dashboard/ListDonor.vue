@@ -35,8 +35,8 @@
                 ຊື່ ແລະ ນາມສະກຸນ: {{ selected.name }} {{ selected.surname }}
               </div>
               <div>
-                ວັນເດືອນປີເກີດ: {{ selected.dob }} | ເພດ:
-                {{ selected.gender }} | ອາຊີບ: {{ selected.job }}
+                ອາຍຸ: {{ getAge(selected.dob) }} | ເພດ: {{ selected.gender }} |
+                ອາຊີບ: {{ selected.job }}
               </div>
               <div>
                 ທີ່ຢູ່: {{ selected.village }}, {{ selected.district }},
@@ -157,6 +157,11 @@ export default {
         default:
           return '---'
       }
+    },
+    getAge(dob) {
+      let ageDifMs = new Date() - new Date(dob)
+      let ageDate = new Date(ageDifMs) // miliseconds from epoch
+      return Math.abs(ageDate.getUTCFullYear() - 1970)
     }
   }
 }
