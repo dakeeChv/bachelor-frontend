@@ -902,6 +902,13 @@
     "@babel/helper-validator-identifier" "^7.14.0"
     to-fast-properties "^2.0.0"
 
+"@bachdgvn/vue-otp-input@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@bachdgvn/vue-otp-input/-/vue-otp-input-1.0.8.tgz#e870f222170902ad9b39177949735990f36e15ac"
+  integrity sha512-yZJD3ONjwEfwrgvP1M+aMYK8VirMzsU4mUihz0SQokda4KX7zFPiWMUP0JNYvpomkrhLMXvFQaA+DsTmrfHSUg==
+  dependencies:
+    vue "^2.5.22"
+
 "@ckeditor/ckeditor5-build-classic@https://github.com/dakeeChv/ckeditor5-build-classic-d.git":
   version "19.0.0"
   resolved "https://github.com/dakeeChv/ckeditor5-build-classic-d.git#42ee508327af18ebff5d941cccd66ec9b12631ab"
@@ -9265,7 +9272,7 @@ vue2-leaflet@~2.7.0:
   resolved "https://registry.yarnpkg.com/vue2-leaflet/-/vue2-leaflet-2.7.1.tgz#2f95c287621bf778f10804c88223877f5c049257"
   integrity sha512-K7HOlzRhjt3Z7+IvTqEavIBRbmCwSZSCVUlz9u4Rc+3xGCLsHKz4TAL4diAmfHElCQdPPVdZdJk8wPUt2fu6WQ==
 
-vue@^2.0.1, vue@^2.6.11:
+vue@^2.0.1, vue@^2.5.22, vue@^2.6.11:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==

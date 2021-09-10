@@ -7,6 +7,9 @@ import vuetify from './plugins/vuetify'
 import VueOtp2 from 'vue-otp-2'
 Vue.use(VueOtp2)
 
+import OtpInput from '@bachdgvn/vue-otp-input'
+Vue.component('v-otp-input', OtpInput)
+
 import '@/assets/sass/index.sass'
 import '@fortawesome/fontawesome-free/css/all.css'
 // import 'font-awesome/css/font-awesome.min.css' // Old fontawesome 4.7

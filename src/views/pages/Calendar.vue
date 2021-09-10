@@ -8,9 +8,7 @@
 
     <v-row class="mt-6" align="center" justify="center">
       <v-card class="ma-3" width="100%" flat>
-        <div
-          class="d-flex flex-xs-column flex-md-row flex-sm-column justify-space-around"
-        >
+        <div class="d-flex flex-md-row flex-column justify-space-around">
           <div class="align-self-center mt-6">
             <v-date-picker
               v-model="pickDate"

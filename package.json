@@ -13,6 +13,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@bachdgvn/vue-otp-input": "^1.0.8",
     "@ckeditor/ckeditor5-build-classic": "https://github.com/dakeeChv/ckeditor5-build-classic-d.git",
     "@ckeditor/ckeditor5-vue2": "~1.0.5",
     "axios": "~0.21.1",
