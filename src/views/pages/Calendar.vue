@@ -29,7 +29,7 @@
             </v-card-title>
             <v-card-text
               class="white text--primary text-center"
-              style="max-height: 150px; height: 150px"
+              style="max-height: 220px; height: 200px"
             >
               <div class="text-h6 font-weight-black">
                 {{ bloodbank['bloodbank']['title'] }}

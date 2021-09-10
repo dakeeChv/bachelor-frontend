@@ -23,7 +23,7 @@
       <div class="ck-content" v-html="currActivity.content"></div>
     </v-card>
     <!-- <div>{{ currActivity }}</div> -->
-    <v-card flat class="pa-6 px-16 mt-4" color="#f7f7f7">
+    <v-card flat class="pa-md-6 px-md-16 mt-md-4" color="#f7f7f7">
       <div class="text-h5 font-weight-bold mt-4 pa-4">ແຜນທີ່</div>
       <l-map id="map" style="height: 400px" :zoom="zoom" :center="centerMap">
         <l-tile-layer :url="url"></l-tile-layer>
